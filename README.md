@@ -4,7 +4,7 @@
 ## Introduction
 
 MIPkit - <u>M</u>ultimedia And <u>I</u>mages <u>P</u>rocessing Lab <u>Kit</u> is a package of image processing tools.\
-The package contains a various functions and classes for quick analysis, processing and visualization.
+The package contains various functions and classes for quick analysis, processing and visualization.
 
 ## Installation
 
