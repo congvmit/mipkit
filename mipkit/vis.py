@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import cv2
 import numpy as np
 
+
 def draw_mask(img_arr, mask_arr):
     """Draw image with mask"""
     pass
