@@ -1,6 +1,8 @@
+import os
 import matplotlib.pyplot as plt
 import cv2
 import numpy as np
+from .images import read_image
 
 
 def draw_mask(img_arr, mask_arr):
@@ -49,3 +51,12 @@ def show_multi_images(list_img_arr, subplot_size=10, rows=1, plt_show=True, titl
         plt.title(title)
     if plt_show:
         plt.show()
+
+
+def show_image_with_paths(list_paths, subplot_size=10, rows=1, plt_show=True, title=None, img_dir=None):
+    list_img_arr = []
+    for path in list_paths:
+        path = os.path.join(img_dir, path)
+        img_arr = read_image(path)
+        list_img_arr.append(img_arr)
+    show_multi_images(list_img_arr, subplot_size, rows, plt_show, title)
