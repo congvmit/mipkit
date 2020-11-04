@@ -7,7 +7,7 @@ class Struct(dict):
         self.__dict__.update(entries)
 
     def __repr__(self):
-        return str(self.__dict__)
+        return str(self.__class__) + ': ' + str(self.__dict__)
 
     def keys(self):
         return list(self.__dict__.keys())
@@ -15,11 +15,18 @@ class Struct(dict):
     def values(self):
         return list(self.__dict__.values())
 
+    def todict(self):
+        return self.__dict__
 
-def load_yaml_config(file_path):
+
+def load_yaml_config(file_path, todict=False):
     with open(file_path, 'r') as f:
-        data = yaml.load(f)
-    return Struct(**data)
+        data = yaml.load(f, Loader=yaml.FullLoader)
+    data = Struct(**data)
+    if todict:
+        return data.todict()
+    else:
+        return data
 
 
 def deprecated(message=''):
@@ -32,3 +39,11 @@ def deprecated(message=''):
             return func(*args, **kwargs)
         return deprecated_func
     return deprecated_decorator
+
+
+if __name__ == '__main__':
+    # Testing
+    config = load_yaml_config('/home/congvm/Workspace/mipkit/test/config.yaml')
+    config = load_yaml_config(
+        '/home/congvm/Workspace/mipkit/test/config.yaml', todict=True)
+    print(config)
