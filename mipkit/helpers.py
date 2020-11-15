@@ -1,6 +1,10 @@
 import yaml
 import warnings
-
+import logging
+import argparse
+from datetime import datetime
+import yaml
+import os
 
 class Struct(dict):
     def __init__(self, **entries):
@@ -28,7 +32,6 @@ def load_yaml_config(file_path, todict=False):
     else:
         return data
 
-
 def deprecated(message=''):
     def deprecated_decorator(func):
         def deprecated_func(*args, **kwargs):
@@ -40,6 +43,15 @@ def deprecated(message=''):
         return deprecated_func
     return deprecated_decorator
 
+def save_config_as_yaml(args: argparse.Namespace, 
+                        folder_to_save: str, 
+                        prefix: str='config'):
+    now = datetime.now()
+    dt_string = now.strftime(f"{prefix}_%d-%m-%Y_%H:%M:%S.yaml")
+    os.makedirs(folder_to_save, exist_ok=True)
+    path_to_save = os.path.join(folder_to_save, dt_string)
+    with open(path_to_save, 'w') as f:
+        yaml.dump(vars(args), f)
 
 if __name__ == '__main__':
     # Testing
