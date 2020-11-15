@@ -1,5 +1,6 @@
 import os
 import matplotlib.pyplot as plt
+from matplotlib import gridspec
 import cv2
 import numpy as np
 from .images import read_image
@@ -26,7 +27,13 @@ def draw_box(img_arr, box, thickness=2, color=None):
     cv2.rectangle(img_arr, (x, y), (xx, yy), color=color, thickness=thickness)
 
 
-def show_multi_images(list_img_arr, subplot_size=10, rows=1, plt_show=True, title=None):
+def show_multi_images(list_img_arr,  
+                      ratio_size=1,
+                      rows=1, 
+                      plt_show=True, 
+                      title=None, 
+                      wspace=0, 
+                      hspace=0, *args, **kwargs):
     """Show multiple images in a plot.
 
     Parameters
@@ -43,20 +50,32 @@ def show_multi_images(list_img_arr, subplot_size=10, rows=1, plt_show=True, titl
         A title of the figure
     """
     columns = len(list_img_arr)//rows
-    fig = plt.figure(figsize=(subplot_size*columns, subplot_size))
+    fig = plt.figure(figsize=(int(ratio_size*columns), int((ratio_size/2)*rows)))
+    gs = gridspec.GridSpec(rows, columns, 
+                           wspace=wspace, 
+                           hspace=wspace)
+    
     for i in range(1, columns*rows + 1):
-        fig.add_subplot(rows, columns, i)
+        a = fig.add_subplot(rows, columns, i)
         plt.imshow(list_img_arr[i - 1])
-    if title is not None:
+        a.set_aspect('equal')
+        a.set_xticklabels([])
+        a.set_yticklabels([])
+        
+    if title:
         plt.title(title)
+        
     if plt_show:
         plt.show()
+        
 
-
-def show_image_with_paths(list_paths, subplot_size=10, rows=1, plt_show=True, title=None, img_dir=None):
+def show_image_with_paths(list_paths, 
+                          rows=1,  
+                          img_dir=None, **kwargs):
     list_img_arr = []
     for path in list_paths:
-        path = os.path.join(img_dir, path)
+        if img_dir:
+            path = os.path.join(img_dir, path)
         img_arr = read_image(path)
         list_img_arr.append(img_arr)
-    show_multi_images(list_img_arr, subplot_size, rows, plt_show, title)
+    show_multi_images(list_img_arr=list_img_arr, rows=rows, **kwargs)
