@@ -4,5 +4,5 @@ from .faces import *
 from .sys import *
 from .multiprocessing import *
 from .helpers import *
-
-__version__ = '1.3.2'
+from .pytorch import *
+__version__ = '1.3.3'
