@@ -28,7 +28,7 @@ def draw_box(img_arr, box, thickness=2, color=None):
 
 
 def show_multi_images(list_img_arr,  
-                      ratio_size=1,
+                      ratio_size=10,
                       rows=1, 
                       plt_show=True, 
                       title=None, 
@@ -49,6 +49,8 @@ def show_multi_images(list_img_arr,
     title: str
         A title of the figure
     """
+
+    assert ratio_size >= 2, ValueError("ratio_size must be greater than 1")
     columns = len(list_img_arr)//rows
     fig = plt.figure(figsize=(int(ratio_size*columns), int((ratio_size/2)*rows)))
     gs = gridspec.GridSpec(rows, columns, 
