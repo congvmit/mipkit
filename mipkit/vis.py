@@ -28,8 +28,9 @@ def visualize_bbox(img, bbox, class_name=None, color=None, thickness=2):
         ((text_width, text_height), _) = cv2.getTextSize(
             class_name, cv2.FONT_HERSHEY_SIMPLEX, 0.35, 1)
 
-        cv2.rectangle(img, (x_min, y_min - int(1.3 * text_height)),
-                      (x_min + text_width, y_min), color, -1)
+        cv2.rectangle(img, (x_min, y_min - int(2.0 * text_height)),
+                      (x_min + int(text_width*1.5), y_min), color, -1)
+
         cv2.putText(
             img,
             text=class_name,
@@ -69,7 +70,7 @@ def visualize(image, bboxes,
     for bbox, sc, category_id in zip(bboxes, scores, category_ids):
         if category_id_to_name is not None:
             class_name = category_id_to_name[category_id]
-            class_name = class_name + ' - ' + str(sc)
+            class_name = class_name + ' - ' + str(np.round(sc, 3))
         else:
             class_name = None
         img = visualize_bbox(img, bbox, class_name,
