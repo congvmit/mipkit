@@ -5,4 +5,6 @@ from .sys import *
 from .multiprocessing import *
 from .helpers import *
 from .pytorch import *
-__version__ = '1.3.3'
+from .stats import *
+
+__version__ = '1.3.4'
