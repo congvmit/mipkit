@@ -3,10 +3,12 @@ import torch
 
 def show_stats(np_arr, return_stats=False, verbose=True):
     stats = {}
-    stats['mean'] = np_arr.mean()
-    stats['median'] = np_arr.median()
-    stats['max'] = np_arr.max()
-    stats['min'] = np_arr.min()
+    is_bool = np_arr.dtype == np.bool or np_arr.dtype == torch.bool
+    if not is_bool:
+        stats['mean'] = np_arr.mean()
+        stats['median'] = np_arr.median()
+        stats['max'] = np_arr.max()
+        stats['min'] = np_arr.min()
     stats['shape'] = np_arr.shape
     stats['dtype'] = np_arr.dtype
     stats['is_tensor'] = torch.is_tensor(np_arr)

@@ -88,6 +88,14 @@ def convert_int_to_str(i, n_char=5):
     return f'{i:0{n_char}d}'
 
 
+def convert_tensor_to_np(tensor, is_detach=True, to_device='cpu'):
+    """Convert tensor to numpy"""
+    assert to_device.split(':')[0] in ['cpu', 'cuda']
+    if is_detach:
+        tensor = tensor.detach()
+    return tensor.to(to_device).numpy()
+
+
 if __name__ == '__main__':
     # Testing
     config = load_yaml_config('/home/congvm/Workspace/mipkit/test/config.yaml')

@@ -60,8 +60,15 @@ def convert_default_to_coco(bbox):
 
 
 def visualize(image, bboxes,
-              scores=None, category_ids=None, category_id_to_name=None,
-              figsize=(12, 12), thickness=2, color=None, bbox_format='default'):
+              scores=None,
+              category_ids=None, 
+              category_id_to_name=None,
+              figsize=(12, 12), 
+              thickness=2, 
+              color=None,
+              bbox_format='default', 
+              title=None, 
+              fontsize=15):
     img = image.copy()
 
     scores = [''] * len(bboxes) if scores is None else scores
@@ -78,6 +85,8 @@ def visualize(image, bboxes,
                              thickness=thickness)
     plt.figure(figsize=figsize)
     plt.axis('off')
+    if title is not None:
+        plt.title(title, fontsize=fontsize)
     plt.imshow(img)
 
 
@@ -121,17 +130,17 @@ def draw_box(img_arr, box, thickness=2, color=None, mode='default'):
     cv2.rectangle(img_arr, (x, y), (xx, yy), color=color, thickness=thickness)
 
 
-def show_multi_images(list_img_arr, 
+def show_multi_images(list_img_arr,
                       list_titles=None,
                       ratio_size=10,
-                      rows=1, 
-                      cmap=None, 
-                      plt_show=True, 
-                      title=None, 
+                      rows=1,
+                      cmap=None,
+                      plt_show=True,
+                      title=None,
                       show_colorbar=False,
                       colorbar_fontsize=20,
                       fontsize=30,
-                      wspace=0, 
+                      wspace=0,
                       hspace=0, *args, **kwargs):
     """Show multiple images in a plot.
 
@@ -151,7 +160,8 @@ def show_multi_images(list_img_arr,
 
     assert ratio_size >= 2, ValueError("ratio_size must be greater than 1")
     columns = len(list_img_arr)//rows
-    fig = plt.figure(figsize=(int(ratio_size*columns), int((ratio_size/2)*rows)))
+    fig = plt.figure(
+        figsize=(int(ratio_size*columns), int((ratio_size/2)*rows)))
     gs = gridspec.GridSpec(rows, columns,
                            wspace=wspace,
                            hspace=wspace)

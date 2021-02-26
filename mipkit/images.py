@@ -5,9 +5,10 @@ import matplotlib.pyplot as plt
 import PIL
 
 
-def read_image(file_path: str) -> np.ndarray:
+def read_image(file_path: str, to_rgb=True) -> np.ndarray:
     img_arr = cv2.imread(file_path)
-    img_arr = cv2.cvtColor(img_arr, cv2.COLOR_BGR2RGB)
+    if to_rgb:
+        img_arr = cv2.cvtColor(img_arr, cv2.COLOR_BGR2RGB)
     return img_arr
 
 
