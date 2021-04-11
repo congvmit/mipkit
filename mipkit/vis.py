@@ -1,12 +1,19 @@
 from .helpers import deprecated
+from .vis import *
 import os
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
 import cv2
 import numpy as np
-from .images import read_image
+
 
 TEXT_COLOR = (255, 255, 255)
+
+
+def show_image(img, figsize=(10, 10)):
+    plt.figure(figsize=figsize)
+    plt.axis('off')
+    plt.imshow(img)
 
 
 def get_random_rgb():
@@ -16,9 +23,6 @@ def get_random_rgb():
 def visualize_bbox(img, bbox, class_name=None, color=None, thickness=2):
     """Visualizes a single bounding box on the image"""
     color = color or get_random_rgb()
-    # x_min, y_min, w, h = bbox
-    # x_min, x_max, y_min, y_max = int(x_min), int(
-    #     x_min + w), int(y_min), int(y_min + h)
     x_min, y_min, x_max, y_max = bbox.astype(int)
 
     cv2.rectangle(img, (x_min, y_min), (x_max, y_max),
@@ -61,13 +65,13 @@ def convert_default_to_coco(bbox):
 
 def visualize(image, bboxes,
               scores=None,
-              category_ids=None, 
+              category_ids=None,
               category_id_to_name=None,
-              figsize=(12, 12), 
-              thickness=2, 
+              figsize=(12, 12),
+              thickness=2,
               color=None,
-              bbox_format='default', 
-              title=None, 
+              bbox_format='default',
+              title=None,
               fontsize=15):
     img = image.copy()
 
@@ -111,7 +115,6 @@ def draw_box(img_arr, box, thickness=2, color=None, mode='default'):
     h_img, w_img, c_img = img_arr.shape
     if color is None:
         color = (randint(), randint(), randint())
-    print('box', box)
     if mode == 'default':
         x, y, xx, yy = box
         x = int(max(0, x))

@@ -3,13 +3,58 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 import PIL
+import torch
+import torchvision.transforms.functional as F
+import torch
+from .vis import *
 
 
-def read_image(file_path: str, to_rgb=True) -> np.ndarray:
-    img_arr = cv2.imread(file_path)
+def convert_to_torch_image(img):
+    """ Convert the image to a torch image.
+        Code:
+            img = torch.tensor(img)
+            img = img.permute((2, 0, 1)).contiguous()
+            if isinstance(img, torch.ByteTensor):
+                return img.float().div(255)
+            else:
+                return img
+            return img
+    """
+    return F.to_tensor(img)
+
+
+def read_image(file_path, to_rgb=True, vis=False):
+    img = cv2.imread(file_path)
     if to_rgb:
-        img_arr = cv2.cvtColor(img_arr, cv2.COLOR_BGR2RGB)
-    return img_arr
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    if vis:
+        show_image(img)
+    return img
+
+
+def read_image_experiments(file_path: str, to_rgb=True, vis=False, to_tensor=False):
+    """Load and convert a ``PIL Image`` or ``numpy.ndarray`` to tensor. This transform does not support torchscript.
+
+    Converts a PIL Image or numpy.ndarray (H x W x C) in the range
+    [0, 255] to a torch.FloatTensor of shape (C x H x W) in the range [0.0, 1.0]
+    if the PIL Image belongs to one of the modes (L, LA, P, I, F, RGB, YCbCr, RGBA, CMYK, 1)
+    or if the numpy.ndarray has dtype = np.uint8
+
+    In the other cases, tensors are returned without scaling.
+
+    .. note::
+        Because the input image is scaled to [0.0, 1.0], this transformation should not be used when
+        transforming target image masks. See the `references`_ for implementing the transforms for image masks.
+
+    .. _references: https://github.com/pytorch/vision/tree/master/references/segmentation
+    """
+    img = read_image(file_path, to_rgb=to_rgb, vis=vis)
+
+    if to_tensor:
+        img_tensor = convert_to_torch_image(img)
+    return {'img_raw': img,
+            'img_tensor': img_tensor
+            }
 
 
 def padding_image(img_arr):

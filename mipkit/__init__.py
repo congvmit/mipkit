@@ -6,6 +6,7 @@ from .multiprocessing import *
 from .helpers import *
 from .pytorch import *
 from .stats import *
+from .ip import *
 
-
-__version__ = '1.3.4'
+__version__ = '1.4.0'
+__author__ = "Minh-Cong Vo"
