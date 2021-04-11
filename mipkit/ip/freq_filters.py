@@ -3,6 +3,49 @@ import numpy as np
 import cv2
 
 
+def get_H(m, n):
+    """Calculate the distance of each point of the m, n matrix from the center"""
+    u = np.array([i if i <= m / 2 else m - i for i in range(m)],
+                dtype=np.float32)
+    v = np.array([i if i <= m / 2 else m - i for i in range(m)],
+                dtype=np.float32)
+    v.shape = n, 1
+    return (u - m/2)**2 + (v -  n/2)**2
+
+def laplacian_filter(fft_mat, d0=10, r1=0.5, rh=2, c=4, h=2.0, l=0.5):
+    """Homomorphic Filter
+
+    Args:
+        fft_mat (ndarray): fft matrix
+        d0 (int, optional): filter size. Defaults to 10.
+        r1 (float, optional): [description]. Defaults to 0.5.
+        rh (int, optional): [description]. Defaults to 2.
+        c (int, optional): [description]. Defaults to 4.
+        h (float, optional): [description]. Defaults to 2.0.
+        l (float, optional): [description]. Defaults to 0.5.
+
+    Returns:
+        nd]: [description]
+    """
+    rows, cols = fft_mat.shape[:2]
+
+    Huv = np.zeros_like(fft_mat)
+    M, N = np.meshgrid(np.arange(-cols // 2, cols // 2),
+                       np.arange(-rows//2, rows//2))
+    # Huv = -((M - M//2) ** 2 + (N - N//2) ** 2)
+    Huv = get_H(rows, cols)
+
+    print(Huv)
+    # Gaussian high-pass filter
+    # Z = (rh - r1) * (1 - np.exp(-c * (Duv ** 2 / d0 ** 2))) + r1
+    
+    # Z =  (1 - np.exp(-c * (Duv ** 2 / d0 ** 2))) 
+    dst = Huv * fft_mat
+
+    # Huv = (h - l) * Huv + l
+    return dst
+
+
 def homomorphic_filter(fft_mat, d0=10, r1=0.5, rh=2, c=4, h=2.0, l=0.5):
     """Homomorphic Filter
 
@@ -18,20 +61,23 @@ def homomorphic_filter(fft_mat, d0=10, r1=0.5, rh=2, c=4, h=2.0, l=0.5):
     Returns:
         nd]: [description]
     """
-    rows, cols = fft_mat.shape
+    rows, cols = fft_mat.shape[:2]
 
-    dst_fftshift = np.zeros_like(fft_mat)
+    Huv = np.zeros_like(fft_mat)
     M, N = np.meshgrid(np.arange(-cols // 2, cols // 2),
                        np.arange(-rows//2, rows//2))
-    D = np.sqrt(M ** 2 + N ** 2)
-    Z = (rh - r1) * (1 - np.exp(-c * (D ** 2 / d0 ** 2))) + r1
-    dst_fftshift = Z * fft_mat
-    dst_fftshift = (h - l) * dst_fftshift + l
-    dst_ifftshift = np.fft.ifftshift(dst_fftshift)
-    dst_ifft = np.fft.ifft2(dst_ifftshift)
-    dst = np.real(dst_ifft)
-    dst = np.uint8(np.clip(dst, 0, 255))
-    return dst
+    Duv = np.sqrt(M ** 2 + N ** 2)
+
+
+    # Gaussian high-pass filter
+    Z = (rh - r1) * (1 - np.exp(-c * (Duv ** 2 / d0 ** 2))) + r1
+    
+    # Z =  (1 - np.exp(-c * (Duv ** 2 / d0 ** 2))) 
+    Huv = Z * fft_mat
+
+    Huv = (h - l) * Huv + l
+    return Huv
+
 
 
 def lpfilter(fft_mat, flag: int, d0: int, n: int, rows=None, cols=None):
@@ -80,7 +126,9 @@ def lpfilter(fft_mat, flag: int, d0: int, n: int, rows=None, cols=None):
         # fft_mat has 2 channels, real and imaginary
         # fliter_mat also requires 2 channels
         filter_mat = cv2.merge((filter_mat, filter_mat))
-    return filter_mat
+
+    filtered_mat = filter_mat * fft_mat
+    return filtered_mat
 
 
 def hpfilter(fft_mat, flag, d0, n, rows=None, cols=None):
@@ -131,7 +179,9 @@ def hpfilter(fft_mat, flag, d0, n, rows=None, cols=None):
         # fft_mat has 2 channels, real and imaginary
         # fliter_mat also requires 2 channels
         filter_mat = cv2.merge((filter_mat, filter_mat))
-    return filter_mat
+
+    filtered_mat = filter_mat * fft_mat
+    return filtered_mat
 
 
 def combine_images(images: list, axis=1):
