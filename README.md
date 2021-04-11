@@ -19,7 +19,12 @@ Or, re-compile and setup from source:
 ```sh
 git clone https://github.com/congvm-it/mipkit.git
 cd mipkit
+
+# For production
 python -m setup.py install
+
+# For development
+pip install -e .
 ```
 
 ## Contribution
