@@ -3,3 +3,6 @@ opencv-python
 matplotlib
 torch
 torchvision
+ray[tune]
+pytorch-lightning
+tensorboard

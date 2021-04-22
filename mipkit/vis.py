@@ -163,8 +163,10 @@ def show_multi_images(list_img_arr,
 
     assert ratio_size >= 2, ValueError("ratio_size must be greater than 1")
     columns = len(list_img_arr)//rows
-    fig = plt.figure(
-        figsize=(int(ratio_size*columns), int((ratio_size/2)*rows)))
+
+    fig = plt.figure(figsize=(int(ratio_size*columns), 
+        int((ratio_size/2)*rows)))
+
     gs = gridspec.GridSpec(rows, columns,
                            wspace=wspace,
                            hspace=wspace)
@@ -175,6 +177,9 @@ def show_multi_images(list_img_arr,
         a.set_aspect('equal')
         a.set_xticklabels([])
         a.set_yticklabels([])
+
+        if list_titles is not None:
+            a.set_title(list_titles[i - 1])
 
     if show_colorbar:
         cbar = plt.colorbar()
