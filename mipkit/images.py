@@ -9,6 +9,44 @@ import torch
 from .vis import *
 
 
+def combine_images(images: list, axis=1):
+    """Combine images
+
+    Args:
+        images (list): image list (must have the same dimension)
+        axis (int): merge direction
+            When axis = 0, the images are merged vertically;
+            When axis = 1, the images are merged horizontally.
+    Returns:
+        merge image
+    """
+    ndim = images[0].ndim
+    shapes = np.array([mat.shape for mat in images])
+    assert np.all(map(lambda e: len(e) == ndim, shapes)
+                  ), 'all images should be same ndim.'
+    if axis == 0:  # merge images vertically
+
+        # Merge image cols
+        cols = np.max(shapes[:, 1])
+
+        # Expand the cols size of each image to make the cols consistent
+        copy_imgs = [cv2.copyMakeBorder(img, 0, 0, 0, cols - img.shape[1],
+                                        cv2.BORDER_CONSTANT, (0, 0, 0)) for img in images]
+        # Merge vertically
+        return np.vstack(copy_imgs)
+
+    else:  # merge images horizontally
+        # Combine the rows of the image
+        rows = np.max(shapes[:, 0])
+
+        # Expand the row size of each image to make rows consistent
+        copy_imgs = [cv2.copyMakeBorder(img, 0, rows - img.shape[0], 0, 0,
+                                        cv2.BORDER_CONSTANT, (0, 0, 0)) for img in images]
+
+        # Merge horizontally
+        return np.hstack(copy_imgs)
+
+
 def convert_to_torch_image(img):
     """ Convert the image to a torch image.
         Code:

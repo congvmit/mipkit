@@ -1,17 +1,18 @@
 # Copyright (c) 2021 congvm
-# 
+#
 # This software is released under the MIT License.
 # https://opensource.org/licenses/MIT
 
 import pytorch_lightning as pl
 from torch.utils.data import DataLoader
 
+
 class DataLoader(pl.LightningDataModule):
-    def __init__(self, train_dataset, 
-                 val_dataset=None, 
-                 test_dataset=None, 
-                 batch_size=1, 
-                 num_workers=1, 
+    def __init__(self, train_dataset,
+                 val_dataset=None,
+                 test_dataset=None,
+                 batch_size=1,
+                 num_workers=1,
                  pin_memory=False):
         super().__init__()
         self.train_dataset = train_dataset

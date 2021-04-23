@@ -24,6 +24,7 @@ def generate_datetime():
     date_time = now.strftime("%m-%d-%Y_%H-%M-%S")
     return date_time
 
+
 class Struct(dict):
     def __init__(self, **entries):
         self.__dict__.update(entries)
@@ -111,6 +112,7 @@ def convert_tensor_to_np(tensor, is_detach=True, to_device='cpu'):
         tensor = tensor.detach()
     return tensor.to(to_device).numpy()
 
+
 def seed_everything(seed):
     pl.seed_everything(seed)
     torch.manual_seed(seed)
@@ -130,10 +132,10 @@ def glob_all_files(folder_dir, ext=None, recursive=False):
     """
     if ext is None:
         return glob(os.path.join(folder_dir, '*.*'))
-    elif isinstance(ext, list): 
+    elif isinstance(ext, list):
         paths = []
         for e in ext:
             paths.extend(glob(os.path.join(folder_dir, '*.' + str(e))))
         return paths
-    elif isinstance(ext, str): 
+    elif isinstance(ext, str):
         return glob(os.path.join(folder_dir, '*.' + str(ext)))
