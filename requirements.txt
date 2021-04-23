@@ -6,3 +6,5 @@ torchvision
 ray[tune]
 pytorch-lightning
 tensorboard
+tqdm
+Image

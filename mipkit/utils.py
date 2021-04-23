@@ -6,12 +6,20 @@ import argparse
 from datetime import datetime
 import yaml
 import os
-# =================================================================
 import pytorch_lightning as pl
 import torch
 import numpy as np
 import random
 from glob import glob
+
+from tqdm import tqdm as _tqdm
+
+
+def tqdm(*args, **kwargs):
+    # tqdm without multiline
+    if hasattr(_tqdm, '__instances'):
+        _tqdm._instances.clear()
+    return _tqdm(*args, **kwargs)
 
 
 def generate_datetime():
