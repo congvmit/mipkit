@@ -6,11 +6,12 @@ import cv2
 def get_H(m, n):
     """Calculate the distance of each point of the m, n matrix from the center"""
     u = np.array([i if i <= m / 2 else m - i for i in range(m)],
-                dtype=np.float32)
+                 dtype=np.float32)
     v = np.array([i if i <= m / 2 else m - i for i in range(m)],
-                dtype=np.float32)
+                 dtype=np.float32)
     v.shape = n, 1
-    return (u - m/2)**2 + (v -  n/2)**2
+    return (u - m/2)**2 + (v - n/2)**2
+
 
 def laplacian_filter(fft_mat, d0=10, r1=0.5, rh=2, c=4, h=2.0, l=0.5):
     """Homomorphic Filter
@@ -38,8 +39,8 @@ def laplacian_filter(fft_mat, d0=10, r1=0.5, rh=2, c=4, h=2.0, l=0.5):
     print(Huv)
     # Gaussian high-pass filter
     # Z = (rh - r1) * (1 - np.exp(-c * (Duv ** 2 / d0 ** 2))) + r1
-    
-    # Z =  (1 - np.exp(-c * (Duv ** 2 / d0 ** 2))) 
+
+    # Z =  (1 - np.exp(-c * (Duv ** 2 / d0 ** 2)))
     dst = Huv * fft_mat
 
     # Huv = (h - l) * Huv + l
@@ -68,16 +69,14 @@ def homomorphic_filter(fft_mat, d0=10, r1=0.5, rh=2, c=4, h=2.0, l=0.5):
                        np.arange(-rows//2, rows//2))
     Duv = np.sqrt(M ** 2 + N ** 2)
 
-
     # Gaussian high-pass filter
     Z = (rh - r1) * (1 - np.exp(-c * (Duv ** 2 / d0 ** 2))) + r1
-    
-    # Z =  (1 - np.exp(-c * (Duv ** 2 / d0 ** 2))) 
+
+    # Z =  (1 - np.exp(-c * (Duv ** 2 / d0 ** 2)))
     Huv = Z * fft_mat
 
     Huv = (h - l) * Huv + l
     return Huv
-
 
 
 def lpfilter(fft_mat, flag: int, d0: int, n: int, rows=None, cols=None):

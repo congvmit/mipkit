@@ -1,4 +1,4 @@
-from .helpers import deprecated
+from .utils import deprecated
 from .vis import *
 import os
 import matplotlib.pyplot as plt
