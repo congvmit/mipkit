@@ -97,8 +97,7 @@ def start_tuning(train_config: dict,
         local_dir=log_dir)
 
     print("Best hyperparameters found were: ", analysis.best_config)
-
-    # Save best config as file
-    with open(os.path.join(log_path, 'best_config.txt'), 'w') as f:
-        import yaml
-        yaml.safe_dump(analysis.best_config, f)
+    analysis.results_df.to_csv(os.path.join(log_path, 'results.csv'),
+                               index=False)
+    analysis.best_result_df.to_csv(os.path.join(log_path, 'best_results.csv'),
+                                   index=False)
