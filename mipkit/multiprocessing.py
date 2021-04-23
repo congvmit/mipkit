@@ -19,7 +19,7 @@ def pool_worker(target, inputs, use_thread=False, num_worker=None, verbose=True)
     verbose: bool
         True: progress bar
         False: silent
-        
+
     Returns
     -------
     list of output of func

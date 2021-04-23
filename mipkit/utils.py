@@ -101,8 +101,17 @@ def split_seq(seq, k=10):
     return [seq[i*n_items: i*n_items + n_items] for i in range(k)]
 
 
-def convert_int_to_str(i, n_char=5):
-    return f'{i:0{n_char}d}'
+def to_str_with_pad(number, n_char=0, pad_value=0):
+    """Convert number to string representation with zero padding.
+
+    Args:
+        i (int): number.  
+        n_char (int, optional): zero padding. Defaults to 0.
+
+    Returns:
+        [type]: [description]
+    """
+    return f'{number:{pad_value}{n_char}d}'
 
 
 def convert_tensor_to_np(tensor, is_detach=True, to_device='cpu'):
@@ -114,6 +123,11 @@ def convert_tensor_to_np(tensor, is_detach=True, to_device='cpu'):
 
 
 def seed_everything(seed):
+    """Seed everything in training process
+
+    Args:
+        seed (int): random seed number.
+    """
     pl.seed_everything(seed)
     torch.manual_seed(seed)
     np.random.seed(seed)
@@ -135,7 +149,7 @@ def glob_all_files(folder_dir, ext=None, recursive=False):
     elif isinstance(ext, list):
         paths = []
         for e in ext:
-            paths.extend(glob(os.path.join(folder_dir, '*.' + str(e))))
+            paths.extend(glob(os.path.join(folder_dir, '**.' + str(e))))
         return paths
     elif isinstance(ext, str):
-        return glob(os.path.join(folder_dir, '*.' + str(ext)))
+        return glob(os.path.join(folder_dir, '**.' + str(ext)))
