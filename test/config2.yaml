@@ -1,0 +1,20 @@
+dataset:
+  train_csv: train_csv.csv
+  val_csv: val_csv.csv
+  test_csv: test_csv.csv
+model:
+  backbone: resnet50
+  num_classes: 10
+load_checkpoint_file: null
+no_cuda: false
+optimizer: SGD
+optimizer_cosine_lr: true
+optimizer_warmup_ratio: 0.05
+optimizer_decay_at_epochs:
+  - 80
+  - 150
+  - 250
+optimizer_decay_with_factor: 10.0
+optimizer_learning_rate: 0.1
+optimizer_momentum: 0.9
+optimizer_weight_decay: 0.0001
