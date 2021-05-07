@@ -6,5 +6,6 @@ from .multiprocessing import *
 from .utils import *
 from .pytorch import *
 from .stats import *
+from .debuggers import *
 
 __author__ = "Cong M. Vo"

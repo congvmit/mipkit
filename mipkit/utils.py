@@ -50,6 +50,9 @@ def generate_datetime():
     return date_time
 
 
+# ===============================================================================
+# Argparse
+# ===============================================================================
 class ArgSpace(dict):
     def __init__(self, **entries):
         self.__dict__.update(entries)
@@ -72,6 +75,11 @@ def to_namespace(d):
         if isinstance(v, dict):
             d[k] = to_namespace(v)
     return argparse.Namespace(**d)
+
+
+def load_parser(name=''):
+    parser = argparse.ArgumentParser(name=name)
+    return parser
 
 
 def load_yaml_config(file_path, to_dict=False, verbose=True, to_args=True):

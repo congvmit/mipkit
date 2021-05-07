@@ -1,0 +1,7 @@
+<diagram program="umletino" version="14.4.0-SNAPSHOT"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>290</x><y>350</y><w>100</w><h>30</h></coordinates><panel_attributes>/AbstractClass/
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>110</x><y>580</y><w>100</w><h>30</h></coordinates><panel_attributes>SimpleClass</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>150</x><y>370</y><w>210</w><h>230</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;210;190;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>440</x><y>420</y><w>210</w><h>90</h></coordinates><panel_attributes>Class: User
+--
+userID
+--
+userName: str
+gener: str</panel_attributes><additional_attributes></additional_attributes></element></diagram>
