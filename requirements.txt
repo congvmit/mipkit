@@ -8,3 +8,5 @@ pytorch-lightning
 tensorboard
 tqdm
 Image
+ipdb
+IPython

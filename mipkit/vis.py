@@ -17,7 +17,9 @@ def show_image(img, figsize=(10, 10)):
 
 
 def get_random_rgb():
-    return (np.random.randint(0, 256), np.random.randint(0, 256), np.random.randint(0, 256))
+    return (np.random.randint(0, 256),
+            np.random.randint(0, 256),
+            np.random.randint(0, 256))
 
 
 def visualize_bbox(img, bbox, class_name=None, color=None, thickness=2):
@@ -87,6 +89,7 @@ def visualize(image, bboxes,
         img = visualize_bbox(img, bbox, class_name,
                              color=color,
                              thickness=thickness)
+                             
     plt.figure(figsize=figsize)
     plt.axis('off')
     if title is not None:
@@ -164,8 +167,8 @@ def show_multi_images(list_img_arr,
     assert ratio_size >= 2, ValueError("ratio_size must be greater than 1")
     columns = len(list_img_arr)//rows
 
-    fig = plt.figure(figsize=(int(ratio_size*columns), 
-        int((ratio_size/2)*rows)))
+    fig = plt.figure(figsize=(int(ratio_size*columns),
+                              int((ratio_size/2)*rows)))
 
     gs = gridspec.GridSpec(rows, columns,
                            wspace=wspace,
