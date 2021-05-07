@@ -1,5 +1,5 @@
 from .utils import deprecated
-from .vis import *
+from .images import read_image
 import os
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
