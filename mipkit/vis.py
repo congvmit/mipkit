@@ -89,7 +89,7 @@ def visualize(image, bboxes,
         img = visualize_bbox(img, bbox, class_name,
                              color=color,
                              thickness=thickness)
-                             
+
     plt.figure(figsize=figsize)
     plt.axis('off')
     if title is not None:

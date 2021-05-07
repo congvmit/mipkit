@@ -1,3 +1,4 @@
+from mipkit import deprecated
 from PIL import Image, ImageDraw
 import cv2
 import numpy as np
@@ -70,6 +71,7 @@ def read_image(file_path, to_rgb=True, vis=False):
     return img
 
 
+@deprecated('Only for specific experiments')
 def read_image_experiments(file_path: str, to_rgb=True, vis=False, to_tensor=False):
     """Load and convert a ``PIL Image`` or ``numpy.ndarray`` to tensor. This transform does not support torchscript.
 

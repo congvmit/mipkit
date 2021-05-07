@@ -7,5 +7,6 @@ from .utils import *
 from .pytorch import *
 from .stats import *
 from .debuggers import *
+from .downloaders import *
 
 __author__ = "Cong M. Vo"
