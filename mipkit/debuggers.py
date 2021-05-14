@@ -32,6 +32,10 @@
 import IPython
 import ipdb
 import pdb
+import os
+import sys
+from inspect import getframeinfo, stack
+from .logging import print_warning
 
 
 class Debugger():
@@ -53,6 +57,9 @@ class Debugger():
             return IPython.embed
 
     def set_trace(self, method=None):
+        caller = getframeinfo(stack()[-1][0])
+        print_warning(
+            f'Set trace is call from `{caller.filename}` at line: {caller.lineno}')
         if method is not None:
             self.tracer = self.init_tracer(method)
         return self.tracer
