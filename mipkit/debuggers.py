@@ -10,7 +10,7 @@ import pdb
 
 
 class Debugger():
-    def __init__(self, method='ipdb'):
+    def __init__(self, method='ipython'):
         """Debugger with available methods: ipdb, pdb or ipython
 
         Args:

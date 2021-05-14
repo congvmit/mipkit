@@ -10,3 +10,4 @@ tqdm
 Image
 ipdb
 IPython
+termcolor

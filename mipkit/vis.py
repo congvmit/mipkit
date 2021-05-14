@@ -1,11 +1,11 @@
-from .utils import deprecated
-from .images import read_image
 import os
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
 import cv2
 import numpy as np
 
+from .images import read_image
+from .utils import deprecated
 
 TEXT_COLOR = (255, 255, 255)
 
@@ -25,6 +25,8 @@ def get_random_rgb():
 def visualize_bbox(img, bbox, class_name=None, color=None, thickness=2):
     """Visualizes a single bounding box on the image"""
     color = color or get_random_rgb()
+    if isinstance(bbox, list): 
+        bbox = np.array(bbox)
     x_min, y_min, x_max, y_max = bbox.astype(int)
 
     cv2.rectangle(img, (x_min, y_min), (x_max, y_max),
@@ -196,13 +198,18 @@ def show_multi_images(list_img_arr,
         plt.show()
 
 
+def show_image_with_path(path, img_dir=None):
+    if img_dir:
+        path = os.path.join(img_dir, path)
+    img_arr = read_image(path)
+    return img_arr
+
+
 def show_image_with_paths(list_paths,
                           rows=1,
                           img_dir=None, **kwargs):
     list_img_arr = []
     for path in list_paths:
-        if img_dir:
-            path = os.path.join(img_dir, path)
-        img_arr = read_image(path)
+        img_arr = show_image_with_path(path, img_dir=img_dir)
         list_img_arr.append(img_arr)
     show_multi_images(list_img_arr=list_img_arr, rows=rows, **kwargs)

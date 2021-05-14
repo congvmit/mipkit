@@ -1,4 +1,3 @@
-
 from PIL import Image, ImageDraw
 import cv2
 import numpy as np
@@ -7,7 +6,6 @@ import PIL
 import torch
 import torchvision.transforms.functional as F
 import torch
-from .vis import *
 from .utils import deprecated
 
 
