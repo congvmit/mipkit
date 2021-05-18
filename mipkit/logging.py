@@ -24,19 +24,32 @@
 """
 
 from termcolor import cprint
+import logging
 
 
-def print_warning(message):
+def get_logger():
+    return logging.getLogger()
+
+
+def mprint(*args):
+    return ' '.join(map(str, *args))
+
+
+def print_warning(*args):
+    message = mprint(args)
     cprint('[WARNING] ' + message, color="yellow")
 
 
-def print_info(message):
+def print_info(*args):
+    message = mprint(args)
     cprint('[INFO] ' + message, color="green")
 
 
-def print_error(message):
+def print_error(*args):
+    message = mprint(args)
     cprint('[ERROR] ' + message, color="red")
 
 
-def print_debug_note(message):
+def print_debug_note(*args):
+    message = mprint(args)
     cprint('[DEBUG] ' + message, color="blue")
