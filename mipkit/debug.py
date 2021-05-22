@@ -56,14 +56,13 @@ class Debugger():
         elif method == 'ipython':
             return IPython.embed
 
-    @classmethod 
-    def set_trace(cls, method=None):
-        caller = getframeinfo(stack()[-1][0])
-        print_warning(
-            f'Set trace is call from `{caller.filename}` at line: {caller.lineno}')
+    def set_trace(self, method=None):
+        # caller = getframeinfo(stack()[-1][0])
+        # print_warning(
+        #     f'Set trace is call from `{caller.filename}` at line: {caller.lineno}')
         if method is not None:
-            cls.tracer = cls.init_tracer(method)
-        return cls.tracer
+            self.tracer = self.init_tracer(method)
+        return self.tracer
 
 
-set_trace = Debugger.set_trace()
+set_trace = Debugger().set_trace()

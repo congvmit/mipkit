@@ -118,11 +118,16 @@ class ArgSpace(dict):
     def todict(self):
         return self.__dict__
 
-
 def to_namespace(d):
     for k, v in d.items():
         if isinstance(v, dict):
             d[k] = to_namespace(v)
+        elif isinstance(v, str):
+            try:
+                d[k] = eval(v)
+            except Exception as e:
+                # TODO: Some cases cannot be eval. DEBUG later
+                pass
     return argparse.Namespace(**d)
 
 
@@ -205,25 +210,12 @@ def to_str_with_pad(number, n_char=0, pad_value=0):
     return f'{number:{pad_value}{n_char}d}'
 
 
-def convert_tensor_to_np(tensor, is_detach=True, to_device='cpu'):
-    """Convert tensor to numpy"""
-    assert to_device.split(':')[0] in ['cpu', 'cuda']
-    if is_detach:
-        tensor = tensor.detach()
-    return tensor.to(to_device).numpy()
-
-
-def seed_everything(seed):
-    """Seed everything in training process
-
-    Args:
-        seed (int): random seed number.
-    """
-    pl.seed_everything(seed)
-    torch.manual_seed(seed)
-    np.random.seed(seed)
-    random.seed(seed)
-
+# def convert_tensor_to_np(tensor, is_detach=True, to_device='cpu'):
+#     """Convert tensor to numpy"""
+#     assert to_device.split(':')[0] in ['cpu', 'cuda']
+#     if is_detach:
+#         tensor = tensor.detach()
+#     return tensor.to(to_device).numpy()
 
 def glob_all_files(folder_dir, ext=None, recursive=False):
     """Glob all files

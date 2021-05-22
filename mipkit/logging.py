@@ -23,7 +23,7 @@
  THE SOFTWARE.
 """
 
-from termcolor import cprint
+from termcolor import cprint, colored
 import logging
 
 
@@ -33,6 +33,18 @@ def get_logger():
 
 def mprint(*args):
     return ' '.join(map(str, *args))
+
+
+def turn_yellow(message):
+    return colored(message, 'yellow')
+
+
+def turn_red(message):
+    return colored(message, 'red')
+
+
+def turn_green(message):
+    return colored(message, 'green')
 
 
 def print_warning(*args):

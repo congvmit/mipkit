@@ -29,7 +29,7 @@ from os import path
 with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
-__version__ = '1.4.5'
+__version__ = '1.5'
 
 setup(
     name='mipkit',

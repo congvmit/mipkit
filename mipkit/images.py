@@ -86,12 +86,14 @@ def convert_to_torch_image(img):
     return F.to_tensor(img)
 
 
-def read_image(file_path, to_rgb=True, vis=False):
-    img = cv2.imread(file_path)
-    if to_rgb:
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    if vis:
-        show_image(img)
+def read_image(file_path, to_rgb=True, use_cv2=False):
+    if use_cv2:
+        img = cv2.imread(file_path)
+        if to_rgb:
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    else:
+        img = Image.open(file_path)
+        img = img.convert('RGB')
     return img
 
 
@@ -193,9 +195,11 @@ def pil_crop_img(img_pil, box):
     return img_pil
 
 
-def load_image_from_file(fpath, mode='rgb'):
+def load_image_from_file(fpath, mode='rgb', to_numpy=False):
     pil_img = Image.open(fpath)
     pil_img = pil_img.convert('RGB')
+    if to_numpy:
+        return np.array(pil_img)
     return pil_img
 
 

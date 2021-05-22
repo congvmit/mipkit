@@ -30,19 +30,26 @@ from argparse import Namespace
 from .utils import load_yaml_config
 from .logging import print_info
 
+
 def parse_args(add_pl_args=True, is_notebook=False, print_args=True):
     parser = ArgumentParser()
 
     # ===============================================================================
     # Training Arguments
     # ===============================================================================
-    parser.add_argument(
-        "--mode", choices=["train", "test"], type=str, default="train")
-    parser.add_argument("-c", "--config_file", type=str,
+    parser.add_argument("--mode",
+                        choices=["train", "test"],
+                        type=str,
+                        default="train")
+    parser.add_argument("-c",
+                        "--config_file",
+                        type=str,
                         help="configuration file")
-    parser.add_argument(
-        "-j", "--num_workers", type=int, default=8, help="number of workers"
-    )
+    parser.add_argument("-j",
+                        "--num_workers",
+                        type=int,
+                        default=8,
+                        help="number of workers")
 
     # ===============================================================================
     # Learing Rate and Scheduler
@@ -68,9 +75,10 @@ def parse_args(add_pl_args=True, is_notebook=False, print_args=True):
     # ===============================================================================
     # Testing
     # ===============================================================================
-    parser.add_argument(
-        "--resume_ckpt", type=str, default=None, help="resuming checkpoint"
-    )
+    parser.add_argument("--resume_ckpt",
+                        type=str,
+                        default=None,
+                        help="resuming checkpoint")
 
     if add_pl_args:
         parser = pl.Trainer.add_argparse_args(parser)
