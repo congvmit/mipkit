@@ -27,15 +27,11 @@ import sys
 import time
 import yaml
 import warnings
-import logging
 import argparse
 from datetime import datetime
 import yaml
 import os
-import pytorch_lightning as pl
-import torch
 import numpy as np
-import random
 from glob import glob
 import argparse
 from tqdm import tqdm as _tqdm
@@ -187,7 +183,7 @@ def save_config_as_yaml(args: argparse.Namespace,
         print('Save yaml config file in :', path_to_save)
     with open(path_to_save, 'w') as f:
         yaml.dump(vars(args), f)
-
+    return path_to_save
 
 def split_seq(seq, k=10):
     ''' Split a given sequence into `k` parts. 
