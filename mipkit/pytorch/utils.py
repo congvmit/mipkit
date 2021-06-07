@@ -14,6 +14,10 @@ def convert_pymodule_to_flatten_dict(model):
             layers = dict(list(layers()))
 
             if len(layers) > 0:
+
+                if previous_layer_name != '':
+                    all_layers[previous_layer_name] = module
+
                 layers_ = layers.copy()
                 for layer_name, layer_module in layers_.items():
                     if previous_layer_name != '':

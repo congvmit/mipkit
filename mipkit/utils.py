@@ -76,7 +76,7 @@ def to_categorical(y, num_classes=None, dtype='float32'):
     n = y.shape[0]
     categorical = np.zeros((n, num_classes), dtype=dtype)
     categorical[np.arange(n), y] = 1
-    output_shape = input_shape + (num_classes,)
+    output_shape = input_shape + (num_classes, )
     categorical = np.reshape(categorical, output_shape)
     return categorical
 
@@ -118,17 +118,21 @@ class ArgSpace(dict):
     def todict(self):
         return self.__dict__
 
-def to_namespace(d):
-    for k, v in d.items():
-        if isinstance(v, dict):
-            d[k] = to_namespace(v)
-        elif isinstance(v, str):
-            try:
-                d[k] = eval(v)
-            except Exception as e:
-                # TODO: Some cases cannot be eval. DEBUG later
-                pass
-    return argparse.Namespace(**d)
+
+def to_namespace(d, mode):
+    if mode == 0:
+        return argparse.Namespace(**d)
+    else:
+        for k, v in d.items():
+            if isinstance(v, dict):
+                d[k] = to_namespace(v, mode)
+            elif isinstance(v, str):
+                try:
+                    d[k] = eval(v)
+                except Exception as e:
+                    # TODO: Some cases cannot be eval. DEBUG later
+                    pass
+        return argparse.Namespace(**d)
 
 
 def load_parser(name=''):
@@ -136,7 +140,26 @@ def load_parser(name=''):
     return parser
 
 
-def load_yaml_config(file_path, to_dict=False, verbose=True, to_args=True):
+def load_yaml_config(file_path,
+                     to_dict=False,
+                     verbose=True,
+                     to_args=True,
+                     mode=0):
+    """Load yaml configuration file
+
+    Args:
+        file_path (str): file to path
+        to_dict (bool, optional): return a dictionary. Defaults to False.
+        verbose (bool, optional): verbose. Defaults to True.
+        to_args (bool, optional): return Namespace. Defaults to True.
+        mode (int, optional): yaml mode. Defaults to 0. 
+            0: default
+            1: user custom
+
+    Returns:
+        [type]: [description]
+    """
+    assert mode in [0, 1]
     if verbose:
         print('Load yaml config file from', file_path)
     with open(file_path, 'r') as f:
@@ -145,7 +168,7 @@ def load_yaml_config(file_path, to_dict=False, verbose=True, to_args=True):
     if to_dict:
         return data.todict()
     elif to_args:
-        return to_namespace(data.todict())
+        return to_namespace(data.todict(), mode=mode)
     else:
         return data
 
@@ -157,21 +180,27 @@ def timeit(verbose=True):
             results = func(*args, **kwargs)
             if verbose:
                 print(
-                    f'The function takes {time.time() - start_time:4f} (s) to process')
+                    f'The function takes {time.time() - start_time:4f} (s) to process'
+                )
             return results
+
         return timeit_func
+
     return timeit_decorator
 
 
 def deprecated(message=''):
     def deprecated_decorator(func):
         def deprecated_func(*args, **kwargs):
-            warnings.warn("{} is a deprecated function. {}".format(func.__name__, message),
+            warnings.warn("{} is a deprecated function. {}".format(
+                func.__name__, message),
                           category=DeprecationWarning,
                           stacklevel=2)
             warnings.simplefilter('default', DeprecationWarning)
             return func(*args, **kwargs)
+
         return deprecated_func
+
     return deprecated_decorator
 
 
@@ -193,8 +222,8 @@ def split_seq(seq, k=10):
     ''' Split a given sequence into `k` parts. 
     '''
     length = len(seq)
-    n_items = length//k + 1
-    return [seq[i*n_items: i*n_items + n_items] for i in range(k)]
+    n_items = length // k + 1
+    return [seq[i * n_items:i * n_items + n_items] for i in range(k)]
 
 
 def to_str_with_pad(number, n_char=0, pad_value=0):
@@ -216,6 +245,7 @@ def to_str_with_pad(number, n_char=0, pad_value=0):
 #     if is_detach:
 #         tensor = tensor.detach()
 #     return tensor.to(to_device).numpy()
+
 
 def glob_all_files(folder_dir, ext=None, recursive=False):
     """Glob all files

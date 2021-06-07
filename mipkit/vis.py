@@ -35,34 +35,62 @@ from .utils import deprecated
 TEXT_COLOR = (255, 255, 255)
 
 
-def show_image(img, figsize=(10, 10)):
+def imshow(img,
+           figsize=(10, 10),
+           plt_show=False,
+           title=None,
+           fontsize=30,
+           *args,
+           **kwargs):
+    return show_image(img=img,
+                      figsize=figsize,
+                      plt_show=plt_show,
+                      title=title,
+                      fontsize=fontsize,
+                      *args,
+                      **kwargs)
+
+
+def show_image(img,
+               figsize=(10, 10),
+               plt_show=False,
+               title=None,
+               fontsize=30,
+               *args,
+               **kwargs):
     plt.figure(figsize=figsize)
     plt.axis('off')
-    plt.imshow(img)
+    plt.imshow(img, *args, **kwargs)
+    if title is not None:
+        plt.title(title, fontsize=fontsize)
+
+    if plt_show:
+        plt.show()
 
 
 def get_random_rgb():
-    return (np.random.randint(0, 256),
-            np.random.randint(0, 256),
+    return (np.random.randint(0, 256), np.random.randint(0, 256),
             np.random.randint(0, 256))
 
 
 def visualize_bbox(img, bbox, class_name=None, color=None, thickness=2):
     """Visualizes a single bounding box on the image"""
     color = color or get_random_rgb()
-    if isinstance(bbox, list): 
+    if isinstance(bbox, list):
         bbox = np.array(bbox)
+
     x_min, y_min, x_max, y_max = bbox.astype(int)
 
     cv2.rectangle(img, (x_min, y_min), (x_max, y_max),
-                  color=color, thickness=thickness)
+                  color=color,
+                  thickness=thickness)
 
     if class_name is not None:
-        ((text_width, text_height), _) = cv2.getTextSize(
-            class_name, cv2.FONT_HERSHEY_SIMPLEX, 0.35, 1)
+        ((text_width, text_height),
+         _) = cv2.getTextSize(class_name, cv2.FONT_HERSHEY_SIMPLEX, 0.35, 1)
 
         cv2.rectangle(img, (x_min, y_min - int(2.0 * text_height)),
-                      (x_min + int(text_width*1.5), y_min), color, -1)
+                      (x_min + int(text_width * 1.5), y_min), color, -1)
 
         cv2.putText(
             img,
@@ -92,7 +120,8 @@ def convert_default_to_coco(bbox):
     return bbox_coco
 
 
-def visualize(image, bboxes,
+def visualize(image,
+              bboxes,
               scores=None,
               category_ids=None,
               category_id_to_name=None,
@@ -113,7 +142,9 @@ def visualize(image, bboxes,
             class_name = class_name + ' - ' + str(np.round(sc, 3))
         else:
             class_name = None
-        img = visualize_bbox(img, bbox, class_name,
+        img = visualize_bbox(img,
+                             bbox,
+                             class_name,
                              color=color,
                              thickness=thickness)
 
@@ -133,14 +164,18 @@ def randint(val_min=0, val_max=255):
     return np.random.randint(val_min, val_max)
 
 
-@deprecated(message='draw_boxes() function is deprecated. Please use visualize() instead.')
+@deprecated(
+    message=
+    'draw_boxes() function is deprecated. Please use visualize() instead.')
 def draw_boxes(img_arr, bboxes, color=None, thickness=2, mode='default'):
     assert mode in ['default', 'coco']
     for box in bboxes:
         draw_box(img_arr, box, color=color, thickness=thickness, mode=mode)
 
 
-@deprecated(message='draw_box() function is deprecated. Please use visualize() instead.')
+@deprecated(
+    message='draw_box() function is deprecated. Please use visualize() instead.'
+)
 def draw_box(img_arr, box, thickness=2, color=None, mode='default'):
     h_img, w_img, c_img = img_arr.shape
     if color is None:
@@ -155,12 +190,44 @@ def draw_box(img_arr, box, thickness=2, color=None, mode='default'):
     elif mode == 'coco':
         x, y, w, h = box
         x = int(max(0, x))
-        w = int(min(w_img, x+w_img))
+        w = int(min(w_img, x + w_img))
         y = int(max(0, y))
-        h = int(min(h_img, y+h_img))
-        x, y, xx, yy = x, y, x+w, y+h
+        h = int(min(h_img, y + h_img))
+        x, y, xx, yy = x, y, x + w, y + h
 
     cv2.rectangle(img_arr, (x, y), (xx, yy), color=color, thickness=thickness)
+
+
+def immulshow(list_img_arr,
+              list_titles=None,
+              ratio_size=10,
+              rows=1,
+              cmap=None,
+              plt_show=True,
+              title=None,
+              show_colorbar=False,
+              colorbar_fontsize=20,
+              fontsize=30,
+              subfontsize=10,
+              wspace=0,
+              hspace=0,
+              *args,
+              **kwargs):
+    return show_multi_images(list_img_arr=list_img_arr,
+                             list_titles=list_titles,
+                             ratio_size=ratio_size,
+                             rows=rows,
+                             cmap=cmap,
+                             plt_show=plt_show,
+                             title=title,
+                             show_colorbar=show_colorbar,
+                             colorbar_fontsize=colorbar_fontsize,
+                             fontsize=fontsize,
+                             subfontsize=subfontsize,
+                             wspace=wspace,
+                             hspace=hspace,
+                             *args,
+                             **kwargs)
 
 
 def show_multi_images(list_img_arr,
@@ -173,8 +240,11 @@ def show_multi_images(list_img_arr,
                       show_colorbar=False,
                       colorbar_fontsize=20,
                       fontsize=30,
+                      subfontsize=10,
                       wspace=0,
-                      hspace=0, *args, **kwargs):
+                      hspace=0,
+                      *args,
+                      **kwargs):
     """Show multiple images in a plot.
 
     Parameters
@@ -192,16 +262,14 @@ def show_multi_images(list_img_arr,
     """
 
     assert ratio_size >= 2, ValueError("ratio_size must be greater than 1")
-    columns = len(list_img_arr)//rows
+    columns = len(list_img_arr) // rows
 
-    fig = plt.figure(figsize=(int(ratio_size*columns),
-                              int((ratio_size/2)*rows)))
+    fig = plt.figure(figsize=(int(ratio_size * columns),
+                              int((ratio_size / 2) * rows)))
 
-    gs = gridspec.GridSpec(rows, columns,
-                           wspace=wspace,
-                           hspace=wspace)
+    gs = gridspec.GridSpec(rows, columns, wspace=wspace, hspace=wspace)
 
-    for i in range(1, columns*rows + 1):
+    for i in range(1, columns * rows + 1):
         a = fig.add_subplot(rows, columns, i)
         plt.imshow(list_img_arr[i - 1], cmap=cmap)
         a.set_aspect('equal')
@@ -209,7 +277,7 @@ def show_multi_images(list_img_arr,
         a.set_yticklabels([])
 
         if list_titles is not None:
-            a.set_title(list_titles[i - 1])
+            a.set_title(list_titles[i - 1], fontsize=subfontsize)
 
     if show_colorbar:
         cbar = plt.colorbar()
@@ -230,9 +298,7 @@ def show_image_with_path(path, img_dir=None):
     return img_arr
 
 
-def show_image_with_paths(list_paths,
-                          rows=1,
-                          img_dir=None, **kwargs):
+def show_image_with_paths(list_paths, rows=1, img_dir=None, **kwargs):
     list_img_arr = []
     for path in list_paths:
         img_arr = show_image_with_path(path, img_dir=img_dir)

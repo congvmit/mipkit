@@ -44,7 +44,6 @@ class PytorchHook(nn.Module):
     def _hook_func(self, layer_name):
         def hook(module, input, output):
             self.layer_outputs[layer_name] = output
-
         return hook
 
 
