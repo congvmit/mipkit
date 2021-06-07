@@ -26,10 +26,14 @@
 from setuptools import setup, find_packages
 from os import path
 
+
+__author__ = "Cong M. Vo"
+__author_email__ = 'congvm.it@gmail.com'
+__version__ = '1.5'
+
+
 with open('requirements.txt') as f:
     requirements = f.read().splitlines()
-
-__version__ = '1.5'
 
 setup(
     name='mipkit',
@@ -39,14 +43,14 @@ setup(
     # package_data={'mipkit': ['faces/*']},
     long_description=open('README.md', 'r').read(),
     long_description_content_type='text/markdown',
-    author='congvm',
-    author_email='congvm.it@gmail.com',
+    author=__author__,
+    author_email=__author_email__,
     license='MIT',
     zip_safe=True,
     install_requires=requirements,
     include_package_data=True,
     classifiers=(
-        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python:: 3',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Topic :: Scientific/Engineering :: Artificial Intelligence',

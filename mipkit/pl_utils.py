@@ -92,11 +92,19 @@ def parse_args(add_pl_args=True, is_notebook=False, print_args=True):
         args = parser.parse_args()
 
     config_args = load_yaml_config(args.config_file, to_args=True)
-    args = Namespace(**vars(args), **vars(config_args))
+
+    # Load arguments from Pytorch Lightining
+    args = vars(args)
+
+    # Load arguments from configuration file
+    args.update(vars(config_args))
+    
+    args = Namespace(**args)
+    # args = Namespace(**vars(args), **vars(config_args))
 
     if print_args:
         print('=================================================')
-        print_info('Arguments')
+        print_info('Arguments:')
         print(args)
         print('=================================================')
     return args

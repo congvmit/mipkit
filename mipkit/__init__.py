@@ -33,8 +33,6 @@ from .stats import *
 from .downloaders import *
 from .images import *
 from .logging import *
-from .pl_utils import *
+# from .pl_utils import *
 from .debug import *
 
-
-__author__ = "Cong M. Vo"
