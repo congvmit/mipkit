@@ -184,6 +184,8 @@ def timeit(verbose=True):
 
     return timeit_decorator
 
+class NotFoundWarning(Warning):
+    pass
 
 def deprecated(message=''):
     def deprecated_decorator(func):

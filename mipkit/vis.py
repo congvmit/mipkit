@@ -28,9 +28,10 @@ import matplotlib.pyplot as plt
 from matplotlib import gridspec
 import cv2
 import numpy as np
+import warnings
 
 from .images import read_image
-from .utils import deprecated
+from .utils import deprecated, NotFoundWarning
 
 TEXT_COLOR = (255, 255, 255)
 
@@ -290,13 +291,16 @@ def show_multi_images(list_img_arr,
     if plt_show:
         plt.show()
 
-
 def show_image_with_path(path, img_dir=None):
     if img_dir:
         path = os.path.join(img_dir, path)
     if os.path.isfile(path):
         img_arr = read_image(path)
     else:
+        warnings.warn("Not found image from path `{}`".format(path),
+                          category=NotFoundWarning,
+                          stacklevel=2)
+
         img_arr = np.zeros([128, 128, 3], dtype=np.uint8)
     return img_arr
 
