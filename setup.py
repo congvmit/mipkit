@@ -29,7 +29,7 @@ from os import path
 
 __author__ = "Cong M. Vo"
 __author_email__ = 'congvm.it@gmail.com'
-__version__ = '1.5.1'
+__version__ = '1.5.2'
 
 
 with open('requirements.txt') as f:

@@ -294,7 +294,10 @@ def show_multi_images(list_img_arr,
 def show_image_with_path(path, img_dir=None):
     if img_dir:
         path = os.path.join(img_dir, path)
-    img_arr = read_image(path)
+    if os.path.isfile(path):
+        img_arr = read_image(path)
+    else:
+        img_arr = np.zeros([128, 128, 3], dtype=np.uint8)
     return img_arr
 
 

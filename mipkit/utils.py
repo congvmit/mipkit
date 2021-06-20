@@ -194,9 +194,7 @@ def deprecated(message=''):
                           stacklevel=2)
             warnings.simplefilter('default', DeprecationWarning)
             return func(*args, **kwargs)
-
         return deprecated_func
-
     return deprecated_decorator
 
 
