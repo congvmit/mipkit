@@ -29,11 +29,33 @@ from matplotlib import gridspec
 import cv2
 import numpy as np
 import warnings
+import pylab
 
 from .images import read_image
 from .utils import deprecated, NotFoundWarning
 
 TEXT_COLOR = (255, 255, 255)
+
+
+def multiplot(data, nrows, ncols, subplot_idx, title=None, *args, **kwargs):
+    ax1 = pylab.subplot(nrows, ncols, subplot_idx)
+    ax1.plot(data, *args, **kwargs)
+    if title is not None:
+        ax1.set_title(title)
+    
+
+def figure_pylab(figsize=(10, 5), wspace=None, hspace=None, show=False):
+    def plot_decorator(func):
+        def plot_func(*args, **kwargs):
+            fig = pylab.gcf()
+            fig.set_size_inches(*figsize)
+            pylab.subplots_adjust(wspace=wspace, hspace=hspace)
+            ret = func(*args, **kwargs)
+            if show:
+                plt.show()
+            return ret
+        return plot_func
+    return plot_decorator
 
 
 def imshow(img,

@@ -40,6 +40,13 @@ import os
 from glob import glob
 
 
+
+def load_csv_and_sort(from_folder, sort_key, reverse=False):
+    path_pattern = os.path.join(from_folder, '*.csv')
+    files = glob(path_pattern)
+    return sorted(files, key=sort_key, reverse=reverse)
+
+    
 def glob_all_files(folder_dir, ext=None, recursive=False):
     """Glob all files
 
