@@ -91,7 +91,7 @@ def parse_args(add_pl_args=True, is_notebook=False, print_args=True):
     else:
         args = parser.parse_args()
 
-    config_args = load_yaml_config(args.config_file, to_args=True)
+    config_args = load_yaml_config(args.config_file, to_args=True, mode=1)
 
     # Load arguments from Pytorch Lightining
     args = vars(args)

@@ -26,11 +26,9 @@
 from setuptools import setup, find_packages
 from os import path
 
-
 __author__ = "Cong M. Vo"
 __author_email__ = 'congvm.it@gmail.com'
-__version__ = '1.5.3'
-
+__version__ = '1.5.4'
 
 with open('requirements.txt') as f:
     requirements = f.read().splitlines()
@@ -50,7 +48,7 @@ setup(
     install_requires=requirements,
     include_package_data=True,
     classifiers=(
-        'Programming Language :: Python:: 3',
+        'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Topic :: Scientific/Engineering :: Artificial Intelligence',

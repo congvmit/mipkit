@@ -33,6 +33,7 @@ from .stats import *
 from .downloaders import *
 from .images import *
 from .logging import *
+from .audio import *
 # from .pl_utils import *
 from .debug import *
 

@@ -3,7 +3,7 @@
 
 ## Introduction
 
-MIPkit - **M**ultimedia And **I**mages **P**rocessing Lab **Kit** is a package of image processing tools.\
+MIPkit - **M**ultimedia And **I**mages **P**rocessing Lab **Kit** is a package of common data processing tools.\
 The package contains various functions and classes for quick analysis, processing and visualization.
 
 ## Installation

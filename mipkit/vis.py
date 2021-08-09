@@ -153,7 +153,8 @@ def visualize(image,
               color=None,
               bbox_format='default',
               title=None,
-              fontsize=15):
+              fontsize=15, 
+              show=False):
     img = image.copy()
 
     scores = [''] * len(bboxes) if scores is None else scores
@@ -170,12 +171,13 @@ def visualize(image,
                              class_name,
                              color=color,
                              thickness=thickness)
-
-    plt.figure(figsize=figsize)
-    plt.axis('off')
-    if title is not None:
-        plt.title(title, fontsize=fontsize)
-    plt.imshow(img)
+    if show:
+        plt.figure(figsize=figsize)
+        plt.axis('off')
+        plt.imshow(img)
+        if title is not None:
+            plt.title(title, fontsize=fontsize)
+    return img
 
 
 def draw_mask(img_arr, mask_arr):

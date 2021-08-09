@@ -175,6 +175,25 @@ def square_box(img, box):
     return [x, y, xx, yy]
 
 
+def compute_bbox_area(bbox):
+    x, y, xx, yy = bbox
+    return (yy - y) * (y - x)
+
+def get_biggest_bbox_area(bboxes):
+    """Return the biggest bounding box with corresponding index     
+
+    Args:
+        bboxes (numpy.array, list): list of bboxes 
+
+    Returns:
+        tuple: the biggest bbox, index
+    """
+    if len(bboxes) > 0:
+        biggest_idx = np.argmax([compute_bbox_area(bbox) for bbox in bboxes])
+        return bboxes[biggest_idx], biggest_idx
+    else:
+        return bboxes, -1
+
 def crop_img(img, box):
     mode = _get_type(img)
     if mode == 'np':
@@ -183,6 +202,12 @@ def crop_img(img, box):
         return pil_crop_img(img, box)
     else:
         raise ValueError('Unknown mode!')
+
+
+def maskout_img(img_arr, box, mask_value=0):
+    x, y, xx, yy = box
+    img_arr[y:yy, x:xx, ...] = mask_value
+    return img_arr
 
 
 def np_crop_img(img_arr, box):
