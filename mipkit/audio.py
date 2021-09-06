@@ -31,7 +31,6 @@ def image_2to3_channels(img):
 N_FFT = 1024  # 2048
 HOP_LENGTH = 512
 N_MELS = 96
-
 N_MFCC = 40
 
 
