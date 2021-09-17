@@ -306,3 +306,7 @@ def random_rotate_with_box(img_pil, box, rot_range=[-10, 10], debug=False):
     if debug:
         img_pil_draw.rectangle(([x, y, xx, yy]))
     return img_pil
+
+
+def blend_imgs(src1, src2, alpha=0.5):
+    return cv2.addWeighted(src1, alpha, src2, 1 - alpha, 0)

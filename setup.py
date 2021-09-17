@@ -28,7 +28,7 @@ from os import path
 
 __author__ = "Cong M. Vo"
 __author_email__ = 'congvm.it@gmail.com'
-__version__ = '1.5.5'
+__version__ = '1.5.6'
 
 with open('requirements.txt') as f:
     requirements = f.read().splitlines()

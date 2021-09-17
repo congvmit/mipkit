@@ -22,6 +22,28 @@ def load_video(video_file: str) -> Tuple[cv2.VideoCapture, Tuple[int, int], int,
     return cap, (width, height), num_frames, fps
 
 
+def get_frame_by_idx(cap: cv2.VideoCapture, idx='middle'):
+    if not isinstance(idx, int): 
+        assert idx in ['middle', 'first', 'last']
+
+    num_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    if idx == 'middle':
+        idx = num_frames // 2
+    elif idx == 'first':
+        idx = 0
+    elif idx == 'last':
+        idx = num_frames - 1
+    if idx > num_frames:
+        raise ValueError('`frame_idx` must be less than a number of frames')
+
+    return_frames = None
+    
+    cap.set(cv2.CAP_PROP_POS_FRAMES, idx)
+    has_frame, return_frames = cap.read()
+    # Convert from BGR to RGB
+    return_frames = cv2.cvtColor(return_frames, cv2.COLOR_BGR2RGB)
+    return return_frames
+
 def get_frames_by_FPS(cap: cv2.VideoCapture, fps=1):
     """Get frames from video given by FPS and
 
