@@ -179,6 +179,7 @@ def compute_bbox_area(bbox):
     x, y, xx, yy = bbox
     return (yy - y) * (y - x)
 
+
 def get_biggest_bbox_area(bboxes):
     """Return the biggest bounding box with corresponding index     
 
@@ -193,6 +194,7 @@ def get_biggest_bbox_area(bboxes):
         return bboxes[biggest_idx], biggest_idx
     else:
         return bboxes, -1
+
 
 def crop_img(img, box):
     mode = _get_type(img)

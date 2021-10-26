@@ -23,7 +23,9 @@
  THE SOFTWARE.
 """
 
-
+try:
+    import torch
+except:
+    raise ImportError("Cannot import `torch`. Please install the pytorch.")
 from .hook import *
 from .utils import *
-

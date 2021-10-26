@@ -48,6 +48,7 @@ def download_img_with_url(url, retry=0, retry_gap=0.1, proxy=None):
         else:
             return None
 
+
 def download_from_youtube(output_path, video_id):
     yt = YouTube(f'https://youtu.be/watch?v={video_id}').streams.first().download(
         output_path=output_path, filename=video_id)

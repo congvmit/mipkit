@@ -210,9 +210,7 @@ def timeit(verbose=True):
                     f"The function takes {time.time() - start_time:4f} (s) to process"
                 )
             return results
-
         return timeit_func
-
     return timeit_decorator
 
 

@@ -270,7 +270,6 @@ def immulshow(list_img_arr: list,
             '`len(list_img_arr)` cannot be divided by rows.', stacklevel=0)
 
     columns = int(len(list_img_arr) / rows + 0.5)
-    # list_missing_img = columns * rows - len(list_img_arr)
     ratio_cols_rows = columns/rows if columns >= rows else rows/columns
     figsize = (int(ratio_size*ratio_cols_rows),
                ratio_size) if columns >= rows else (ratio_size, int(ratio_size*ratio_cols_rows))
@@ -288,27 +287,27 @@ def immulshow(list_img_arr: list,
     img = None
     for i in range(rows):
         for j in range(columns):
-
             if i*columns + j < len(list_img_arr):
                 img = list_axs[i][j].imshow(
                     list_img_arr[i*columns + j], cmap=cmap)
                 list_axs[i][j].set_aspect('equal')
-
-                if not show_sticks:
-                    list_axs[i][j].set_xticklabels([])
-                    list_axs[i][j].set_yticklabels([])
-
-                if show_grid:
-                    list_axs[i][j].grid(True, color=grid_color)
-
-                if list_subtitles is not None:
-                    list_axs[i][j].set_title(
-                        list_subtitles[i*columns + j],
-                        y=SUBTITLE_REL_POS,
-                        fontsize=subtitle_fontsize,
-                        color=subtitle_color)
             else:
                 list_axs[i][j].set_facecolor(background_color)
+
+            if show_grid:
+                list_axs[i][j].grid(True, color=grid_color)
+
+            if not show_sticks:
+                list_axs[i][j].set_xticklabels([])
+                list_axs[i][j].set_yticklabels([])
+
+            if list_subtitles is not None:
+                list_axs[i][j].set_title(
+                    list_subtitles[i*columns + j],
+                    y=SUBTITLE_REL_POS,
+                    fontsize=subtitle_fontsize,
+                    color=subtitle_color)
+
     # fig.tight_layout()
     right_adjust = RIGHT_ADJ if show_colorbar else DEFAULT_ADJ
     fig.subplots_adjust(left=DEFAULT_ADJ, bottom=DEFAULT_ADJ, right=right_adjust,

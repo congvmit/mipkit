@@ -23,18 +23,35 @@
  THE SOFTWARE.
 """
 
-from .vis import *
-from .faces import *
-from .multiprocessing import *
-from .utils import *
-from .stats import *
-from .downloaders import *
-from .images import *
-from .logging import *
-from .audio import *
-from .debug import *
-from .video import *
+import itk
 
 
-# from .pytorch import *
-# from .medical import *
+def load_DICOM_series(folder_dir):
+    # https://itk.org/ITKExamples/src/IO/GDCM/ReadDICOMSeriesAndWrite3DImage/Documentation.html
+    PixelType = itk.ctype("signed short")
+    Dimension = 3
+
+    ImageType = itk.Image[PixelType, Dimension]
+
+    namesGenerator = itk.GDCMSeriesFileNames.New()
+    namesGenerator.SetUseSeriesDetails(True)
+    namesGenerator.AddSeriesRestriction("0008|0021")
+    namesGenerator.SetGlobalWarningDisplay(False)
+    namesGenerator.SetDirectory(folder_dir)
+
+    # Beware, seriesUID is a tuple
+    # Example:
+    # ('1.2.840.113619.2.379.114374080023902.100461.1600744141171.5.33.75000051251220200825',)
+    seriesUID = namesGenerator.GetSeriesUIDs()
+
+    seriesIdentifier = seriesUID[0]  # Get the first one
+    fileNames = namesGenerator.GetFileNames(seriesIdentifier)
+
+    reader = itk.ImageSeriesReader[ImageType].New()
+    dicomIO = itk.GDCMImageIO.New()
+    reader.SetImageIO(dicomIO)
+    reader.SetFileNames(fileNames)
+    reader.ForceOrthogonalDirectionOff()
+    itk_image = reader.GetOutput()
+    output_arr = itk.GetArrayFromImage(itk_image)
+    return output_arr

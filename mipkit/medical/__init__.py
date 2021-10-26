@@ -22,19 +22,10 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 """
+try:
+    import itk
+except:
+    raise ImportError(
+        "Cannot import `itk`. Please install the itk by `pip install itk`.")
 
-from .vis import *
-from .faces import *
-from .multiprocessing import *
-from .utils import *
-from .stats import *
-from .downloaders import *
-from .images import *
-from .logging import *
-from .audio import *
-from .debug import *
-from .video import *
-
-
-# from .pytorch import *
-# from .medical import *
+from .dicom import *
