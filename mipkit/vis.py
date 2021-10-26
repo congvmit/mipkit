@@ -1,19 +1,19 @@
 """
  The MIT License (MIT)
  Copyright (c) 2021 Cong Vo
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  Provided license texts might have their own copyrights and restrictions
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -42,7 +42,7 @@ def multiplot(data, nrows, ncols, subplot_idx, title=None, *args, **kwargs):
     ax1.plot(data, *args, **kwargs)
     if title is not None:
         ax1.set_title(title)
-    
+
 
 def figure_pylab(figsize=(10, 5), wspace=None, hspace=None, show=False):
     def plot_decorator(func):
@@ -153,7 +153,7 @@ def visualize(image,
               color=None,
               bbox_format='default',
               title=None,
-              fontsize=15, 
+              fontsize=15,
               show=False):
     img = image.copy()
 
@@ -190,8 +190,7 @@ def randint(val_min=0, val_max=255):
 
 
 @deprecated(
-    message=
-    'draw_boxes() function is deprecated. Please use visualize() instead.')
+    message='draw_boxes() function is deprecated. Please use visualize() instead.')
 def draw_boxes(img_arr, bboxes, color=None, thickness=2, mode='default'):
     assert mode in ['default', 'coco']
     for box in bboxes:
@@ -223,38 +222,118 @@ def draw_box(img_arr, box, thickness=2, color=None, mode='default'):
     cv2.rectangle(img_arr, (x, y), (xx, yy), color=color, thickness=thickness)
 
 
-def immulshow(list_img_arr,
-              list_titles=None,
-              ratio_size=10,
-              rows=1,
-              cmap=None,
-              plt_show=True,
-              title=None,
-              show_colorbar=False,
-              colorbar_fontsize=20,
-              fontsize=30,
-              subfontsize=10,
-              wspace=0,
-              hspace=0,
-              *args,
-              **kwargs):
-    return show_multi_images(list_img_arr=list_img_arr,
-                             list_titles=list_titles,
-                             ratio_size=ratio_size,
-                             rows=rows,
-                             cmap=cmap,
-                             plt_show=plt_show,
-                             title=title,
-                             show_colorbar=show_colorbar,
-                             colorbar_fontsize=colorbar_fontsize,
-                             fontsize=fontsize,
-                             subfontsize=subfontsize,
-                             wspace=wspace,
-                             hspace=hspace,
-                             *args,
-                             **kwargs)
+def immulshow(list_img_arr: list,
+              list_subtitles: list = None,
+              ratio_size: int = 10,
+              rows: int = 1,
+              cmap: str = None,
+              plt_show: bool = True,
+              title: str = None,
+              show_colorbar: bool = False,
+              colorbar_fontsize: int = 15,
+              colorbar_color: str = 'black',
+              title_fontsize: int = 30,
+              title_color: int = 'black',
+              subtitle_fontsize: int = 20,
+              subtitle_color: str = 'black',
+              background_color: str = 'white',
+              show_grid: bool = False,
+              grid_color: str = 'black',
+              show_sticks: bool = False,
+              wspace=0.1,
+              hspace=0.1,
+              title_rel_pos=None,
+              subtitle_rel_pos=None):
+    """Show multiple images in a plot.
+
+    Parameters
+    ----------
+    list_img_arr : list
+        a list of numpy arrays
+    subplot_size: int
+        subplot image size to show
+    rows: int
+        A number of rows to show images
+    plt_show: bool
+        Finalize preparing plot and display
+    title: str
+        A title of the figure
+    """
+    TITLE_REL_POS = title_rel_pos if title_rel_pos else 0.9
+    SUBTITLE_REL_POS = subtitle_rel_pos if subtitle_rel_pos else -0.1
+    RIGHT_ADJ = 0.8
+    DEFAULT_ADJ = None
+
+    assert ratio_size >= 2, ValueError("ratio_size must be greater than 1")
+    if len(list_img_arr) % rows != 0:
+        warnings.warn(
+            '`len(list_img_arr)` cannot be divided by rows.', stacklevel=0)
+
+    columns = int(len(list_img_arr) / rows + 0.5)
+    # list_missing_img = columns * rows - len(list_img_arr)
+    ratio_cols_rows = columns/rows if columns >= rows else rows/columns
+    figsize = (int(ratio_size*ratio_cols_rows),
+               ratio_size) if columns >= rows else (ratio_size, int(ratio_size*ratio_cols_rows))
+    fig, list_axs = plt.subplots(nrows=rows, ncols=columns,
+                                 figsize=figsize)
+
+    if rows == 1:
+        # Convert to list of list for plotting purposes
+        list_axs = [list_axs]
+
+    if columns == 1:
+        list_axs = [[ax] for ax in list_axs]
+
+    fig.set_facecolor(background_color)
+    img = None
+    for i in range(rows):
+        for j in range(columns):
+
+            if i*columns + j < len(list_img_arr):
+                img = list_axs[i][j].imshow(
+                    list_img_arr[i*columns + j], cmap=cmap)
+                list_axs[i][j].set_aspect('equal')
+
+                if not show_sticks:
+                    list_axs[i][j].set_xticklabels([])
+                    list_axs[i][j].set_yticklabels([])
+
+                if show_grid:
+                    list_axs[i][j].grid(True, color=grid_color)
+
+                if list_subtitles is not None:
+                    list_axs[i][j].set_title(
+                        list_subtitles[i*columns + j],
+                        y=SUBTITLE_REL_POS,
+                        fontsize=subtitle_fontsize,
+                        color=subtitle_color)
+            else:
+                list_axs[i][j].set_facecolor(background_color)
+    # fig.tight_layout()
+    right_adjust = RIGHT_ADJ if show_colorbar else DEFAULT_ADJ
+    fig.subplots_adjust(left=DEFAULT_ADJ, bottom=DEFAULT_ADJ, right=right_adjust,
+                        top=DEFAULT_ADJ, wspace=wspace, hspace=hspace)
+
+    if show_colorbar:
+        # https: // stackoverflow.com/questions/13784201/how-to-have-one-colorbar-for-all-subplots
+        # left, bottom, width, height
+        cbar_ax = fig.add_axes([0.85, 0.15, 0.03, 0.7])
+        cbar = plt.colorbar(img, cax=cbar_ax)
+        for t in cbar.ax.get_yticklabels():
+            t.set_fontsize(colorbar_fontsize)
+            t.set_color(colorbar_color)
+
+    if title:
+        fig.suptitle(title, y=TITLE_REL_POS,
+                     fontsize=title_fontsize,
+                     color=title_color)
+
+    if plt_show:
+        plt.show()
 
 
+@deprecated('This function is deprecated and will be removed soon.'
+            ' Please use `mipkit.immulshow`')
 def show_multi_images(list_img_arr,
                       list_titles=None,
                       ratio_size=10,
@@ -268,6 +347,7 @@ def show_multi_images(list_img_arr,
                       subfontsize=10,
                       wspace=0,
                       hspace=0,
+                      background_color='white',
                       *args,
                       **kwargs):
     """Show multiple images in a plot.
@@ -285,13 +365,12 @@ def show_multi_images(list_img_arr,
     title: str
         A title of the figure
     """
-
     assert ratio_size >= 2, ValueError("ratio_size must be greater than 1")
     columns = len(list_img_arr) // rows
 
     fig = plt.figure(figsize=(int(ratio_size * columns),
                               int((ratio_size / 2) * rows)))
-
+    fig.set_facecolor(background_color)
     gs = gridspec.GridSpec(rows, columns, wspace=wspace, hspace=wspace)
 
     for i in range(1, columns * rows + 1):
@@ -315,23 +394,35 @@ def show_multi_images(list_img_arr,
     if plt_show:
         plt.show()
 
+
 def show_image_with_path(path, img_dir=None):
     if img_dir:
         path = os.path.join(img_dir, path)
+
+    img_arr = None
     if os.path.isfile(path):
         img_arr = read_image(path)
     else:
         warnings.warn("Not found image from path `{}`".format(path),
-                          category=NotFoundWarning,
-                          stacklevel=2)
-
-        img_arr = np.zeros([128, 128, 3], dtype=np.uint8)
+                      category=NotFoundWarning,
+                      stacklevel=2)
     return img_arr
 
 
+@deprecated('Please use `mipkit.imshow_with_paths`')
 def show_image_with_paths(list_paths, rows=1, img_dir=None, **kwargs):
     list_img_arr = []
     for path in list_paths:
         img_arr = show_image_with_path(path, img_dir=img_dir)
-        list_img_arr.append(img_arr)
+        if img_arr is not None:
+            list_img_arr.append(img_arr)
     show_multi_images(list_img_arr=list_img_arr, rows=rows, **kwargs)
+
+
+def imshow_with_paths(list_paths, rows=1, img_dir=None, **kwargs):
+    list_img_arr = []
+    for path in list_paths:
+        img_arr = show_image_with_path(path, img_dir=img_dir)
+        if img_arr is not None:
+            list_img_arr.append(img_arr)
+    immulshow(list_img_arr=list_img_arr, rows=rows, **kwargs)

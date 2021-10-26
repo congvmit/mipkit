@@ -143,14 +143,13 @@ def load_parser(name=""):
 
 def load_txt(file_path, process_func=None):
     with open(file_path, 'r') as f:
-        lines =  f.readlines()
-    
+        lines = f.readlines()
+
     if process_func is not None:
         return [process_func(l) for l in lines]
     else:
         return lines
 
-    
 
 def load_json(file_path, to_args=True):
     """Load json
@@ -225,7 +224,8 @@ def deprecated(message=""):
     def deprecated_decorator(func):
         def deprecated_func(*args, **kwargs):
             warnings.warn(
-                "{} is a deprecated function. {}".format(func.__name__, message),
+                'This {} is deprecated and will be removed soon. {}'.format(
+                    func.__name__, message),
                 category=DeprecationWarning,
                 stacklevel=2,
             )
@@ -255,7 +255,7 @@ def split_seq(seq, k=10):
     """Split a given sequence into `k` parts."""
     length = len(seq)
     n_items = length // k + 1
-    return [seq[i * n_items : i * n_items + n_items] for i in range(k)]
+    return [seq[i * n_items: i * n_items + n_items] for i in range(k)]
 
 
 def to_str_with_pad(number, n_char=0, pad_value=0):
