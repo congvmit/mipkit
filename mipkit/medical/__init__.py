@@ -28,4 +28,5 @@ except:
     raise ImportError(
         "Cannot import `itk`. Please install the itk by `pip install itk`.")
 
-from .dicom import *
+from .utils import *
+from .vis import *

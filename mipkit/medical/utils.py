@@ -24,6 +24,12 @@
 """
 
 import itk
+import SimpleITK as sitk
+
+
+def load_nii_file(path_to_load):
+    sitk_image = sitk.ReadImage(path_to_load)
+    return sitk.GetArrayFromImage(sitk_image)
 
 
 def load_DICOM_series(folder_dir):

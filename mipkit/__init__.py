@@ -34,7 +34,7 @@ from .logging import *
 from .audio import *
 from .debug import *
 from .video import *
-
+from . import medical
 
 # from .pytorch import *
 # from .medical import *
