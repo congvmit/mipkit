@@ -23,6 +23,8 @@
  THE SOFTWARE.
 """
 
+import datetime
+from pydicom.dataset import FileDataset, FileMetaDataset
 import itk
 import SimpleITK as sitk
 
@@ -61,3 +63,20 @@ def load_DICOM_series(folder_dir):
     itk_image = reader.GetOutput()
     output_arr = itk.GetArrayFromImage(itk_image)
     return output_arr
+
+
+def save_NII_file(image_3d, path_to_save):
+    file_meta = FileMetaDataset()
+    ds = FileDataset(path_to_save, {},
+                     file_meta=file_meta)  # , preamble=b"\0" * 128)
+
+    # transform array to 3D image
+    ct_pet_image = sitk.GetImageFromArray(image_3d)
+
+    # Set creation date/time
+    dt = datetime.datetime.now()
+    ds.ContentDate = dt.strftime('%Y%m%d')
+    timeStr = dt.strftime('%H%M%S.%3f')  # long format with micro seconds
+    ds.ContentTime = timeStr
+    # ds.save_as(path_to_save, write_like_original=True)
+    sitk.WriteImage(image_3d, path_to_save)  # , imageIO='NiftiImageIO')
