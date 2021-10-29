@@ -65,13 +65,13 @@ def load_DICOM_series(folder_dir):
     return output_arr
 
 
-def save_NII_file(image_3d, path_to_save):
+def save_3d_file(image_3d, path_to_save):
     file_meta = FileMetaDataset()
     ds = FileDataset(path_to_save, {},
                      file_meta=file_meta)  # , preamble=b"\0" * 128)
 
     # transform array to 3D image
-    ct_pet_image = sitk.GetImageFromArray(image_3d)
+    image_3d = sitk.GetImageFromArray(image_3d)
 
     # Set creation date/time
     dt = datetime.datetime.now()

@@ -30,3 +30,4 @@ except:
 
 from .utils import *
 from .vis import *
+from .itk_snap import *
