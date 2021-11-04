@@ -37,6 +37,16 @@ from .utils import deprecated, NotFoundWarning
 TEXT_COLOR = (255, 255, 255)
 
 
+def import_matplotlib():
+    plt.rcParams["figure.figsize"] = (8, 8)
+    plt.rcParams["figure.dpi"] = 125
+    plt.rcParams["font.size"] = 14
+    plt.rcParams['font.family'] = ['sans-serif']
+    plt.rcParams['font.sans-serif'] = ['DejaVu Sans']
+    plt.style.use('ggplot')
+    return plt
+
+
 def multiplot(data, nrows, ncols, subplot_idx, title=None, *args, **kwargs):
     ax1 = pylab.subplot(nrows, ncols, subplot_idx)
     ax1.plot(data, *args, **kwargs)
