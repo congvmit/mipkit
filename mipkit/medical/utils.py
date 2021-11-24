@@ -1,19 +1,19 @@
 """
  The MIT License (MIT)
  Copyright (c) 2021 Cong Vo
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  Provided license texts might have their own copyrights and restrictions
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -106,7 +106,7 @@ def load_DICOM_series(folder_dir: str, series_index: int = 0, Dimension: int = 3
     return output_arr
 
 
-@deprecated("Please use `mipkit.medical.save_medical_image_file` instead!")
+@ deprecated("Please use `mipkit.medical.save_medical_image_file` instead!")
 def save_3d_file(image_3d, path_to_save):
     return save_medical_image_file(image_3d, path_to_save)
 

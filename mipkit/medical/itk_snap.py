@@ -15,7 +15,7 @@ class ITKSnap():
             -w FILE              : Load workspace from FILE
                                 :   (-w cannot be mixed with -g,-s,-l,-o options)
         Args:
-            itk_snap_path ([type]): [description]
+            itk_snap_path (str): path to ITK-Snap
         """
         assert os.path.isfile(itk_snap_bin_path)
         self.itk_snap_bin_path = itk_snap_bin_path

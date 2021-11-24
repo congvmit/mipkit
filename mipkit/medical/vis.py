@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from .. import immulshow
-# TODO
 
 
 def im3dshow(image_3d, slide_x_pos=0, slide_y_pos=0, slide_z_pos=0, ratio_size=10, **kwargs):

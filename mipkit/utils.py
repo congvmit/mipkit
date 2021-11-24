@@ -23,6 +23,7 @@
  THE SOFTWARE.
 """
 
+import copy
 import sys
 import time
 import yaml
@@ -105,18 +106,41 @@ def generate_datetime():
 # ===============================================================================
 # Argparse
 # ===============================================================================
+
 class ArgSpace(dict):
-    def __init__(self, **entries):
-        self.__dict__.update(entries)
+    def __getattr__(self, attr):
+        if attr == '__getstate__':
+            return super(DD, self).__getstate__
+        elif attr == '__setstate__':
+            return super(DD, self).__setstate__
+        elif attr == '__slots__':
+            return super(DD, self).__slots__
+        return self[attr]
+
+    def __setattr__(self, attr, value):
+        # Safety check to ensure consistent behavior with __getattr__.
+        assert attr not in ('__getstate__', '__setstate__', '__slots__')
+        #         if attr.startswith('__'):
+        #             return super(DD, self).__setattr__(attr, value)
+        self[attr] = value
+
+    def __str__(self):
+        return 'ArgSpace: %s' % dict(self)
 
     def __repr__(self):
-        return str(self.__class__) + ": " + str(self.__dict__)
+        return str(self)
 
-    def keys(self):
-        return list(self.__dict__.keys())
+    def __deepcopy__(self, memo):
+        z = ArgSpace()
+        for k, kv in self.items():
+            z[k] = copy.deepcopy(kv, memo)
+        return z
 
-    def values(self):
-        return list(self.__dict__.values())
+    # def keys(self):
+    #     return list(self.__dict__.keys())
+
+    # def values(self):
+    #     return list(self.__dict__.values())
 
     def todict(self):
         return self.__dict__
@@ -151,7 +175,7 @@ def load_txt(file_path, process_func=None):
         return lines
 
 
-def load_json(file_path, to_args=True):
+def load_json(file_path, to_args=False):
     """Load json
 
     Args:

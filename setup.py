@@ -28,7 +28,7 @@ from os import path
 
 __author__ = "Cong M. Vo"
 __author_email__ = 'congvm.it@gmail.com'
-__version__ = '1.5.8'
+__version__ = '1.5.9'
 
 with open('requirements.txt') as f:
     requirements = f.read().splitlines()
@@ -53,4 +53,5 @@ setup(
         'Operating System :: OS Independent',
         'Topic :: Scientific/Engineering :: Artificial Intelligence',
     ),
+    entry_points={"console_scripts": ["expandPDF=mipkit.pdf:main"]},
 )
