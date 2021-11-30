@@ -47,11 +47,15 @@ def expand_margin(path_to_load, path_to_save=None, expected_margin=100, overwrit
             page = p.getPage(i)
             new_page = writer.addBlankPage(
                 page.mediaBox.getWidth() + 2 * expected_margin,
-                page.mediaBox.getHeight() + 2 * expected_margin
+                page.mediaBox.getHeight() + 2
             )
-            new_page.mergeScaledTranslatedPage(page, scale=1,
-                                               tx=expected_margin,
-                                               ty=expected_margin)
+            new_page.mergePage(page)
+
+            # page.scaleTo(int(page.mediaBox.getWidth()),
+            #              int(page.mediaBox.getHeight()))
+            # new_page.mergeScaledTranslatedPage(page, scale=1,
+            #                                    tx=expected_margin,
+            #                                    ty=expected_margin)
             # writer.addPage(new_page)
 
         with open(path_to_save, 'wb') as f:
@@ -98,6 +102,5 @@ def main():
     # if args.folder:
 
 
-# if __name__ == "__main__":
-#     print('Go here')
-#     main()
+if __name__ == "__main__":
+    main()

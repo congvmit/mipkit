@@ -49,6 +49,15 @@ def load_csv_and_sort(from_folder, sort_key, reverse=False):
     return sorted(files, key=sort_key, reverse=reverse)
 
 
+def partition_a_list(input_list: list, num_parts: int = 2):
+    assert isinstance(num_parts, int)
+    assert num_parts >= 1
+    length = len(input_list)
+    n_items_per_part = length // num_parts + 1
+    return [input_list[i*n_items_per_part:i*n_items_per_part + n_items_per_part]
+            for i in range(num_parts)]
+
+
 def glob_all_files(folder_dir, ext=None, recursive=False):
     """Glob all files
 

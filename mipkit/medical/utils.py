@@ -23,6 +23,7 @@
  THE SOFTWARE.
 """
 
+import nibabel as nib
 import datetime
 from pydicom.dataset import FileDataset, FileMetaDataset
 import itk
@@ -49,20 +50,25 @@ def flip_diagonally(x):
 
 @deprecated('Please use `mipkit.medical.load_medical_image_file` instead')
 def load_nii_file(path_to_load: str):
-    return load_medical_image_file(path_to_load)
+    return load_medical_image_from_file(path_to_load)
 
 
-def load_medical_image_file(path_to_load: str):
+def load_medical_image_from_file(path_to_load: str, return_array_only=True):
     """Load medical file
 
     Args:
         path_to_load (str): Path to medical image file
 
     Returns:
-        sitk.Image: MedicalImage file
+        ndarray: Numpy array
     """
-    sitk_image = sitk.ReadImage(path_to_load)
-    return sitk.GetArrayFromImage(sitk_image)
+    # sitk_image = sitk.ReadImage(path_to_load)
+    # return sitk.GetArrayFromImage(sitk_image)
+    nib_obj = nib.load(path_to_load)
+    if return_array_only:
+        return nib_obj.get_data()
+    else:
+        return nib_obj
 
 
 def cvt_array_to_ITKImage(np_image: np.ndarray) -> sitk.Image:
