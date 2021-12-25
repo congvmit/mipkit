@@ -22,36 +22,3 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 """
-
-from setuptools import setup, find_packages
-from os import path
-
-__author__ = "Cong M. Vo"
-__author_email__ = 'congvm.it@gmail.com'
-__version__ = '1.5.11'
-
-with open('requirements.txt') as f:
-    requirements = f.read().splitlines()
-
-setup(
-    name='mipkit',
-    version=__version__,
-    description='mipkit',
-    packages=find_packages(),
-    # package_data={'mipkit': ['faces/*']},
-    long_description=open('README.md', 'r').read(),
-    long_description_content_type='text/markdown',
-    author=__author__,
-    author_email=__author_email__,
-    license='MIT',
-    zip_safe=True,
-    install_requires=requirements,
-    include_package_data=True,
-    classifiers=(
-        'Programming Language :: Python :: 3',
-        'License :: OSI Approved :: MIT License',
-        'Operating System :: OS Independent',
-        'Topic :: Scientific/Engineering :: Artificial Intelligence',
-    ),
-    entry_points={"console_scripts": ["expandPDF=mipkit.pdf:main"]},
-)
