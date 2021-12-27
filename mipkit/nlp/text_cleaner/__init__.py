@@ -23,16 +23,5 @@
  THE SOFTWARE.
 """
 
-from .vis import *
-from .multiprocessing import *
-from .utils import *
-from .stats import *
-from .downloaders import *
-from .images import *
-from .logging import *
-from .audio import *
-from .debug import *
-from . import video
-from . import faces
-from . import medical
-from . import nlp
+from .clearner import TextCleaner
+from .core import clean
