@@ -23,4 +23,4 @@
  THE SOFTWARE.
 """
 
-from .text_cleaner import TextCleaner, core
+from .text_cleaner import TextCleaner, core, constants

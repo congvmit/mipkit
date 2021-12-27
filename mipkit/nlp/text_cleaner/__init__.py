@@ -23,5 +23,5 @@
  THE SOFTWARE.
 """
 
-from .clearner import TextCleaner
+from .cleaner import TextCleaner
 from .core import clean

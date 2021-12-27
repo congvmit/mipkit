@@ -219,11 +219,11 @@ def remove_punct(text):
     Returns:
         str
     """
-    return re.sub(r"[^a-zA-Z\d", "", text)
+    return re.sub(r"[^a-zA-Z\d", " ", text)
 
 
 def remove_punct_with_ignoration(text, ignore_list):
-    return re.sub(fr"[^a-zA-Z\d{''.join(ignore_list)}']", "", text)
+    return re.sub(fr"[^a-zA-Z\d{''.join(ignore_list)}']", " ", text)
 
 
 def remove_emoji(text):
@@ -231,6 +231,13 @@ def remove_emoji(text):
         if x in text:
             text = text.replace(x, "")
     return text
+
+
+def expand_contractions(s):
+    def replace(match):
+        return constants.CONTRACTIONS_DICT[match.group(0)]
+
+    return constants.CONTRACTIONS_REGEX.sub(replace, s)
 
 
 def clean(
@@ -250,6 +257,7 @@ def clean(
     no_currency_symbols=False,
     no_punct=False,
     no_emoji=False,
+    no_contractions=True,
     ignore_puncts: list = [],
     replace_with_url="<URL>",
     replace_with_email="<EMAIL>",
@@ -318,6 +326,8 @@ def clean(
         text = replace_numbers(text, replace_with_number)
     if no_digits:
         text = replace_digits(text, replace_with_digit)
+    if no_contractions:
+        text = expand_contractions(text)
     if no_punct:
         if replace_with_punct == "":
             if len(ignore_puncts) == 0:
