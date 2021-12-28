@@ -14,5 +14,4 @@ Image
 ipdb
 IPython
 termcolor
-
 itk

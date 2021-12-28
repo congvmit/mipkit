@@ -27,7 +27,7 @@ import logging
 import re
 import sys
 from unicodedata import category
-
+from bs4 import BeautifulSoup
 from emoji import UNICODE_EMOJI, demojize, emojize
 from ftfy import fix_text
 
@@ -233,6 +233,11 @@ def remove_emoji(text):
     return text
 
 
+def remove_html_tags(text):
+    soup = BeautifulSoup(text, "html.parser")
+    return soup.get_text()
+
+
 def expand_contractions(s):
     def replace(match):
         return constants.CONTRACTIONS_DICT[match.group(0)]
@@ -257,7 +262,8 @@ def clean(
     no_currency_symbols=False,
     no_punct=False,
     no_emoji=False,
-    no_contractions=True,
+    no_contractions=False,
+    no_html_tags=False,
     ignore_puncts: list = [],
     replace_with_url="<URL>",
     replace_with_email="<EMAIL>",
@@ -287,8 +293,10 @@ def clean(
         no_digits (bool): if True, replace all digits with a special DIGIT token
         no_currency_symbols (bool): if True, replace all currency symbols
             with a special CURRENCY token
-        no_punct (bool): if True, remove all punctuation (replace with
-            empty string)
+        no_punct (bool): if True, remove all punctuation (replace with empty string)
+        ignore_puncts (list): provide a list of ignored punctuations 
+        no_contractions: if True, expand all contractions
+        no_html_tags (bool): if True, remove all html tags
         replace_with_url (str): special URL token, default "<URL>",
         replace_with_email (str): special EMAIL token, default "<EMAIL>",
         replace_with_phone_number (str): special PHONE token, default "<PHONE>",
@@ -318,6 +326,8 @@ def clean(
         text = to_ascii_unicode(text, lang=lang, no_emoji=no_emoji)
     if no_urls:
         text = replace_urls(text, replace_with_url)
+    if no_html_tags:
+        text = remove_html_tags(text)
     if no_emails:
         text = replace_emails(text, replace_with_email)
     if no_phone_numbers:
