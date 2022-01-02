@@ -28,7 +28,7 @@ import pytorch_lightning as pl
 from argparse import ArgumentParser
 from argparse import Namespace
 from .utils import load_yaml_config
-from .logging import print_info
+from .logger import print_info
 
 
 def parse_args(add_pl_args=True, is_notebook=False, print_args=True):

@@ -29,10 +29,13 @@ from .utils import *
 from .stats import *
 from .downloaders import *
 from .images import *
-from .logging import *
+from .logger import *
 from .audio import *
 from .debug import *
 from . import video
 from . import faces
 from . import medical
 from . import nlp
+from . import dl
+
+# from . import shell

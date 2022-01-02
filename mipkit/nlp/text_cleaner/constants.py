@@ -23,6 +23,8 @@
  THE SOFTWARE.
 """
 
+from nltk.corpus import stopwords
+import nltk
 import re
 import sys
 import unicodedata
@@ -447,3 +449,8 @@ CONTRACTIONS_DICT = {
 }
 
 CONTRACTIONS_REGEX = re.compile('(%s)' % '|'.join(CONTRACTIONS_DICT.keys()))
+
+
+nltk.download('stopwords')
+STOPWORDS = stopwords.words('english')
+STOPWORDS_REGEX = re.compile(r'\b(' + r'|'.join(STOPWORDS) + r')\b\s*')

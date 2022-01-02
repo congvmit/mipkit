@@ -43,7 +43,7 @@ try:
 except:
     from unicodedata import normalize
 
-    unidecode = lambda x: normalize("NFD", x).encode("ASCII", "ignore").decode(
+    def unidecode(x): return normalize("NFD", x).encode("ASCII", "ignore").decode(
         "utf-8")
     log.warning(
         "Since the GPL-licensed package `unidecode` is not installed, using Python's `unicodedata` package which yields worse results."
@@ -238,11 +238,24 @@ def remove_html_tags(text):
     return soup.get_text()
 
 
+def remove_website_links(text):
+    template = re.compile(r'https?://\S+|www\.\S+')  # Removes website links
+    return template.sub(r'', text)
+
+
+def remove_stopwords(text, stopwords_regex=constants.STOPWORDS_REGEX):
+    return stopwords_regex.sub('', text)
+
+
 def expand_contractions(s):
     def replace(match):
         return constants.CONTRACTIONS_DICT[match.group(0)]
 
     return constants.CONTRACTIONS_REGEX.sub(replace, s)
+
+
+def remove_extra_spaces(text):
+    return re.sub(' +', ' ', text)  # Remove Extra Spaces
 
 
 def clean(
@@ -263,7 +276,10 @@ def clean(
     no_punct=False,
     no_emoji=False,
     no_contractions=False,
+    no_website_links=False,
+    no_stopwords=False,
     no_html_tags=False,
+    no_extra_spaces=False,
     ignore_puncts: list = [],
     replace_with_url="<URL>",
     replace_with_email="<EMAIL>",
@@ -338,6 +354,8 @@ def clean(
         text = replace_digits(text, replace_with_digit)
     if no_contractions:
         text = expand_contractions(text)
+    if no_website_links:
+        text = remove_website_links(text)
     if no_punct:
         if replace_with_punct == "":
             if len(ignore_puncts) == 0:
@@ -352,9 +370,11 @@ def clean(
 
     if lower:
         text = text.lower()
-
+    if no_stopwords:
+        text = remove_stopwords(text)
+    if no_extra_spaces:
+        text = remove_extra_spaces(text)
     if normalize_whitespace:
         text = _normalize_whitespace(text, no_line_breaks, strip_lines,
                                      keep_two_line_breaks)
-
     return text

@@ -1,7 +1,7 @@
 import torch.nn as nn
 from collections import OrderedDict
 from .utils import convert_pymodule_to_flatten_dict
-from ..logging import turn_red
+from ..logger import turn_red
 import warnings
 
 
