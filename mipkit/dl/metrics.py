@@ -27,11 +27,7 @@
 import scipy.stats as scs
 
 
-def pearsonr(
-        x,
-        y,
-        dim
-):
+def pearsonr(x, y, dim):
     r"""Computes Pearson Correlation Coefficient across rows.
     Pearson Correlation Coefficient (also known as Linear Correlation
     Coefficient or Pearson's :math:`\rho`) is computed as:

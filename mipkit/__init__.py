@@ -37,5 +37,4 @@ from . import faces
 from . import medical
 from . import nlp
 from . import dl
-
-# from . import shell
+from .pytorch import hook

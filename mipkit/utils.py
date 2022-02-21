@@ -54,8 +54,10 @@ def partition_a_list(input_list: list, num_parts: int = 2):
     assert num_parts >= 1
     length = len(input_list)
     n_items_per_part = length // num_parts + 1
-    return [input_list[i*n_items_per_part:i*n_items_per_part + n_items_per_part]
-            for i in range(num_parts)]
+    return [
+        input_list[i * n_items_per_part : i * n_items_per_part + n_items_per_part]
+        for i in range(num_parts)
+    ]
 
 
 def glob_all_files(folder_dir, ext=None, recursive=False):
@@ -116,25 +118,26 @@ def generate_datetime():
 # Argparse
 # ===============================================================================
 
+
 class ArgSpace(dict):
     def __getattr__(self, attr):
-        if attr == '__getstate__':
+        if attr == "__getstate__":
             return super(DD, self).__getstate__
-        elif attr == '__setstate__':
+        elif attr == "__setstate__":
             return super(DD, self).__setstate__
-        elif attr == '__slots__':
+        elif attr == "__slots__":
             return super(DD, self).__slots__
         return self[attr]
 
     def __setattr__(self, attr, value):
         # Safety check to ensure consistent behavior with __getattr__.
-        assert attr not in ('__getstate__', '__setstate__', '__slots__')
+        assert attr not in ("__getstate__", "__setstate__", "__slots__")
         #         if attr.startswith('__'):
         #             return super(DD, self).__setattr__(attr, value)
         self[attr] = value
 
     def __str__(self):
-        return 'ArgSpace: %s' % dict(self)
+        return "ArgSpace: %s" % dict(self)
 
     def __repr__(self):
         return str(self)
@@ -175,7 +178,7 @@ def load_parser(name=""):
 
 
 def load_txt(file_path, process_func=None):
-    with open(file_path, 'r') as f:
+    with open(file_path, "r") as f:
         lines = f.readlines()
 
     if process_func is not None:
@@ -184,19 +187,13 @@ def load_txt(file_path, process_func=None):
         return lines
 
 
-def load_json(file_path, to_args=False):
-    """Load json
-
-    Args:
-        file_path ([type]): [description]
-        to_args (bool, optional): return Namespace. Defaults to True.
-        mode (int, optional): yaml mode. Defaults to 0.
-            0: default
-            1: user custom
+def load_json(file_path, to_args=False, object_hook=None):
+    """
+    Loads a json file into a dictionary.
     """
     fname = Path(file_path)
     with fname.open("rt") as handle:
-        data = json.load(handle, object_hook=OrderedDict)
+        data = json.load(handle, object_hook=object_hook)
 
     if to_args:
         return to_namespace(data, mode=1)
@@ -243,7 +240,9 @@ def timeit(verbose=True):
                     f"The function takes {time.time() - start_time:4f} (s) to process"
                 )
             return results
+
         return timeit_func
+
     return timeit_decorator
 
 
@@ -255,8 +254,9 @@ def deprecated(message=""):
     def deprecated_decorator(func):
         def deprecated_func(*args, **kwargs):
             warnings.warn(
-                'This {} is deprecated and will be removed soon. {}'.format(
-                    func.__name__, message),
+                "This {} is deprecated and will be removed soon. {}".format(
+                    func.__name__, message
+                ),
                 category=DeprecationWarning,
                 stacklevel=2,
             )
@@ -286,7 +286,7 @@ def split_seq(seq, k=10):
     """Split a given sequence into `k` parts."""
     length = len(seq)
     n_items = length // k + 1
-    return [seq[i * n_items: i * n_items + n_items] for i in range(k)]
+    return [seq[i * n_items : i * n_items + n_items] for i in range(k)]
 
 
 def to_str_with_pad(number, n_char=0, pad_value=0):

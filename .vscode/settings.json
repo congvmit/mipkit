@@ -1,4 +1,9 @@
 {
     "python.pythonPath": "/home/congvm/.virtualenvs/dl-py3/bin/python",
-    "jupyter.jupyterServerType": "local"
+    "jupyter.jupyterServerType": "local",
+    "python.testing.pytestArgs": [
+        "mipkit"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
 }

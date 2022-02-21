@@ -28,40 +28,48 @@ import logging
 
 
 def get_logger():
-    return logging.getLogger()
+    logger = logging.getLogger()
+    logger.setLevel(level=logging.INFO)
+    formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
+    ch = logging.StreamHandler()
+    ch.setFormatter(formatter)
+    logger.addHandler(ch)
+    return logger
 
 
 def mprint(*args):
-    return ' '.join(map(str, *args))
+    return " ".join(map(str, *args))
 
 
 def turn_yellow(message):
-    return colored(message, 'yellow')
+    return colored(message, "yellow")
 
 
 def turn_red(message):
-    return colored(message, 'red')
+    return colored(message, "red")
 
 
 def turn_green(message):
-    return colored(message, 'green')
+    return colored(message, "green")
 
 
 def print_warning(*args):
     message = mprint(args)
-    cprint('[WARNING] ' + message, color="yellow")
+    cprint("[WARNING] " + message, color="yellow")
 
 
 def print_info(*args):
     message = mprint(args)
-    cprint('[INFO] ' + message, color="green")
+    cprint("[INFO] " + message, color="green")
 
 
 def print_error(*args):
     message = mprint(args)
-    cprint('[ERROR] ' + message, color="red")
+    cprint("[ERROR] " + message, color="red")
 
 
 def print_debug_note(*args):
     message = mprint(args)
-    cprint('[DEBUG] ' + message, color="blue")
+    cprint("[DEBUG] " + message, color="blue")

@@ -43,8 +43,9 @@ try:
 except:
     from unicodedata import normalize
 
-    def unidecode(x): return normalize("NFD", x).encode("ASCII", "ignore").decode(
-        "utf-8")
+    def unidecode(x):
+        return normalize("NFD", x).encode("ASCII", "ignore").decode("utf-8")
+
     log.warning(
         "Since the GPL-licensed package `unidecode` is not installed, using Python's `unicodedata` package which yields worse results."
     )
@@ -78,8 +79,7 @@ def fix_bad_unicode(text, normalization="NFC"):
     """
     # trying to fix backslash-replaced strings (via https://stackoverflow.com/a/57192592/4028896)
     try:
-        text = text.encode("latin",
-                           "backslashreplace").decode("unicode-escape")
+        text = text.encode("latin", "backslashreplace").decode("unicode-escape")
     except:
         pass
 
@@ -117,10 +117,9 @@ def to_ascii_unicode(text, lang="en", no_emoji=False):
     return text
 
 
-def normalize_whitespace(text,
-                         no_line_breaks=False,
-                         strip_lines=True,
-                         keep_two_line_breaks=False):
+def normalize_whitespace(
+    text, no_line_breaks=False, strip_lines=True, keep_two_line_breaks=False
+):
     """
     Given ``text`` str, replace one or more spacings with a single space, and one
     or more line breaks with a single newline. Also strip leading/trailing whitespace.
@@ -133,10 +132,12 @@ def normalize_whitespace(text,
     else:
         if keep_two_line_breaks:
             text = constants.NONBREAKING_SPACE_REGEX.sub(
-                " ", constants.TWO_LINEBREAK_REGEX.sub(r"\n\n", text))
+                " ", constants.TWO_LINEBREAK_REGEX.sub(r"\n\n", text)
+            )
         else:
             text = constants.NONBREAKING_SPACE_REGEX.sub(
-                " ", constants.LINEBREAK_REGEX.sub(r"\n", text))
+                " ", constants.LINEBREAK_REGEX.sub(r"\n", text)
+            )
 
     return text.strip()
 
@@ -192,12 +193,23 @@ def replace_currency_symbols(text, replace_with="<CUR>"):
 
 
 def replace_punct(text, replace_with=" "):
-    return text.translate(
-        dict.fromkeys(
-            (i for i in range(sys.maxunicode)
-             if category(chr(i)).startswith("P")),
-            replace_with,
-        ))
+    """
+    Replace punctuations from ``text`` with whitespaces.
+    Args:
+        text (str): raw text
+    Returns:
+        str
+    """
+    return re.sub(r"[^a-zA-Z\d]", replace_with, text)
+
+
+# def replace_punct(text, replace_with=" "):
+#     return text.translate(
+#         dict.fromkeys(
+#             (i for i in range(sys.maxunicode)
+#              if category(chr(i)).startswith("P")),
+#             replace_with,
+#         ))
 
 
 def remove_punct(text):
@@ -211,15 +223,15 @@ def remove_punct(text):
     return text.translate(constants.PUNCT_TRANSLATE_UNICODE)
 
 
-def remove_punct(text):
-    """
-    Replace punctuations from ``text`` with whitespaces.
-    Args:
-        text (str): raw text
-    Returns:
-        str
-    """
-    return re.sub(r"[^a-zA-Z\d", " ", text)
+# def remove_punct(text):
+#     """
+#     Replace punctuations from ``text`` with whitespaces.
+#     Args:
+#         text (str): raw text
+#     Returns:
+#         str
+#     """
+#     return re.sub(r"[^a-zA-Z\d", " ", text)
 
 
 def remove_punct_with_ignoration(text, ignore_list):
@@ -239,12 +251,12 @@ def remove_html_tags(text):
 
 
 def remove_website_links(text):
-    template = re.compile(r'https?://\S+|www\.\S+')  # Removes website links
-    return template.sub(r'', text)
+    template = re.compile(r"https?://\S+|www\.\S+")  # Removes website links
+    return template.sub(r"", text)
 
 
 def remove_stopwords(text, stopwords_regex=constants.STOPWORDS_REGEX):
-    return stopwords_regex.sub('', text)
+    return stopwords_regex.sub("", text)
 
 
 def expand_contractions(s):
@@ -255,7 +267,14 @@ def expand_contractions(s):
 
 
 def remove_extra_spaces(text):
-    return re.sub(' +', ' ', text)  # Remove Extra Spaces
+    return re.sub(" +", " ", text)  # Remove Extra Spaces
+
+
+# Remove repetitions
+# TODO: Add remove repetitions
+def remove_repetition(text):
+    pattern = re.compile(r"(.)\1{2,}", re.DOTALL)
+    return pattern.sub(r"\1", text)
 
 
 def clean(
@@ -265,7 +284,7 @@ def clean(
     lower=True,
     normalize_whitespace=True,
     no_line_breaks=False,
-    strip_lines=True,
+    strip_lines=False,
     keep_two_line_breaks=False,
     no_urls=False,
     no_emails=False,
@@ -310,7 +329,7 @@ def clean(
         no_currency_symbols (bool): if True, replace all currency symbols
             with a special CURRENCY token
         no_punct (bool): if True, remove all punctuation (replace with empty string)
-        ignore_puncts (list): provide a list of ignored punctuations 
+        ignore_puncts (list): provide a list of ignored punctuations
         no_contractions: if True, expand all contractions
         no_html_tags (bool): if True, remove all html tags
         replace_with_url (str): special URL token, default "<URL>",
@@ -340,6 +359,8 @@ def clean(
         text = replace_currency_symbols(text, replace_with_currency_symbol)
     if to_ascii:
         text = to_ascii_unicode(text, lang=lang, no_emoji=no_emoji)
+    if no_emoji and not to_ascii:
+        text = remove_emoji(text)
     if no_urls:
         text = replace_urls(text, replace_with_url)
     if no_html_tags:
@@ -365,16 +386,14 @@ def clean(
         else:
             text = replace_punct(text, replace_with_punct)
 
-    if no_emoji and not to_ascii:
-        text = remove_emoji(text)
-
     if lower:
         text = text.lower()
     if no_stopwords:
         text = remove_stopwords(text)
-    if no_extra_spaces:
-        text = remove_extra_spaces(text)
+    # if no_extra_spaces:
+    # text = remove_extra_spaces(text)
     if normalize_whitespace:
-        text = _normalize_whitespace(text, no_line_breaks, strip_lines,
-                                     keep_two_line_breaks)
+        text = _normalize_whitespace(
+            text, no_line_breaks, strip_lines, keep_two_line_breaks
+        )
     return text

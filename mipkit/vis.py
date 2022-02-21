@@ -41,9 +41,9 @@ def import_matplotlib():
     plt.rcParams["figure.figsize"] = (8, 8)
     plt.rcParams["figure.dpi"] = 125
     plt.rcParams["font.size"] = 14
-    plt.rcParams['font.family'] = ['sans-serif']
-    plt.rcParams['font.sans-serif'] = ['DejaVu Sans']
-    plt.style.use('ggplot')
+    plt.rcParams["font.family"] = ["sans-serif"]
+    plt.rcParams["font.sans-serif"] = ["DejaVu Sans"]
+    plt.style.use("ggplot")
     return plt
 
 
@@ -64,35 +64,31 @@ def figure_pylab(figsize=(10, 5), wspace=None, hspace=None, show=False):
             if show:
                 plt.show()
             return ret
+
         return plot_func
+
     return plot_decorator
 
 
-def imshow(img,
-           figsize=(10, 10),
-           plt_show=False,
-           title=None,
-           fontsize=30,
-           *args,
-           **kwargs):
-    return show_image(img=img,
-                      figsize=figsize,
-                      plt_show=plt_show,
-                      title=title,
-                      fontsize=fontsize,
-                      *args,
-                      **kwargs)
+def imshow(
+    img, figsize=(10, 10), plt_show=False, title=None, fontsize=30, *args, **kwargs
+):
+    return show_image(
+        img=img,
+        figsize=figsize,
+        plt_show=plt_show,
+        title=title,
+        fontsize=fontsize,
+        *args,
+        **kwargs
+    )
 
 
-def show_image(img,
-               figsize=(10, 10),
-               plt_show=False,
-               title=None,
-               fontsize=30,
-               *args,
-               **kwargs):
+def show_image(
+    img, figsize=(10, 10), plt_show=False, title=None, fontsize=30, *args, **kwargs
+):
     plt.figure(figsize=figsize)
-    plt.axis('off')
+    plt.axis("off")
     plt.imshow(img, *args, **kwargs)
     if title is not None:
         plt.title(title, fontsize=fontsize)
@@ -102,8 +98,11 @@ def show_image(img,
 
 
 def get_random_rgb():
-    return (np.random.randint(0, 256), np.random.randint(0, 256),
-            np.random.randint(0, 256))
+    return (
+        np.random.randint(0, 256),
+        np.random.randint(0, 256),
+        np.random.randint(0, 256),
+    )
 
 
 def visualize_bbox(img, bbox, class_name=None, color=None, thickness=2):
@@ -114,16 +113,20 @@ def visualize_bbox(img, bbox, class_name=None, color=None, thickness=2):
 
     x_min, y_min, x_max, y_max = bbox.astype(int)
 
-    cv2.rectangle(img, (x_min, y_min), (x_max, y_max),
-                  color=color,
-                  thickness=thickness)
+    cv2.rectangle(img, (x_min, y_min), (x_max, y_max), color=color, thickness=thickness)
 
     if class_name is not None:
-        ((text_width, text_height),
-         _) = cv2.getTextSize(class_name, cv2.FONT_HERSHEY_SIMPLEX, 0.35, 1)
+        ((text_width, text_height), _) = cv2.getTextSize(
+            class_name, cv2.FONT_HERSHEY_SIMPLEX, 0.35, 1
+        )
 
-        cv2.rectangle(img, (x_min, y_min - int(2.0 * text_height)),
-                      (x_min + int(text_width * 1.5), y_min), color, -1)
+        cv2.rectangle(
+            img,
+            (x_min, y_min - int(2.0 * text_height)),
+            (x_min + int(text_width * 1.5), y_min),
+            color,
+            -1,
+        )
 
         cv2.putText(
             img,
@@ -138,7 +141,7 @@ def visualize_bbox(img, bbox, class_name=None, color=None, thickness=2):
 
 
 def convert_coco_to_default(bbox):
-    '''x, y, w, h --> x, y, xx, yy'''
+    """x, y, w, h --> x, y, xx, yy"""
     bbox_coco = bbox.copy()
     bbox_coco[:, 2] = bbox_coco[:, 2] + bbox_coco[:, 0]
     bbox_coco[:, 3] = bbox_coco[:, 3] + bbox_coco[:, 1]
@@ -146,44 +149,42 @@ def convert_coco_to_default(bbox):
 
 
 def convert_default_to_coco(bbox):
-    '''x, y, xx, yy --> x, y, w, h'''
+    """x, y, xx, yy --> x, y, w, h"""
     bbox_coco = bbox.copy()
     bbox_coco[:, 2] = bbox_coco[:, 2] - bbox_coco[:, 0]
     bbox_coco[:, 3] = bbox_coco[:, 3] - bbox_coco[:, 1]
     return bbox_coco
 
 
-def visualize(image,
-              bboxes,
-              scores=None,
-              category_ids=None,
-              category_id_to_name=None,
-              figsize=(12, 12),
-              thickness=2,
-              color=None,
-              bbox_format='default',
-              title=None,
-              fontsize=15,
-              show=False):
+def visualize(
+    image,
+    bboxes,
+    scores=None,
+    category_ids=None,
+    category_id_to_name=None,
+    figsize=(12, 12),
+    thickness=2,
+    color=None,
+    bbox_format="default",
+    title=None,
+    fontsize=15,
+    show=False,
+):
     img = image.copy()
 
-    scores = [''] * len(bboxes) if scores is None else scores
-    category_ids = [''] * len(bboxes) if category_ids is None else category_ids
+    scores = [""] * len(bboxes) if scores is None else scores
+    category_ids = [""] * len(bboxes) if category_ids is None else category_ids
 
     for bbox, sc, category_id in zip(bboxes, scores, category_ids):
         if category_id_to_name is not None:
             class_name = category_id_to_name[category_id]
-            class_name = class_name + ' - ' + str(np.round(sc, 3))
+            class_name = class_name + " - " + str(np.round(sc, 3))
         else:
             class_name = None
-        img = visualize_bbox(img,
-                             bbox,
-                             class_name,
-                             color=color,
-                             thickness=thickness)
+        img = visualize_bbox(img, bbox, class_name, color=color, thickness=thickness)
     if show:
         plt.figure(figsize=figsize)
-        plt.axis('off')
+        plt.axis("off")
         plt.imshow(img)
         if title is not None:
             plt.title(title, fontsize=fontsize)
@@ -200,28 +201,29 @@ def randint(val_min=0, val_max=255):
 
 
 @deprecated(
-    message='draw_boxes() function is deprecated. Please use visualize() instead.')
-def draw_boxes(img_arr, bboxes, color=None, thickness=2, mode='default'):
-    assert mode in ['default', 'coco']
+    message="draw_boxes() function is deprecated. Please use visualize() instead."
+)
+def draw_boxes(img_arr, bboxes, color=None, thickness=2, mode="default"):
+    assert mode in ["default", "coco"]
     for box in bboxes:
         draw_box(img_arr, box, color=color, thickness=thickness, mode=mode)
 
 
 @deprecated(
-    message='draw_box() function is deprecated. Please use visualize() instead.'
+    message="draw_box() function is deprecated. Please use visualize() instead."
 )
-def draw_box(img_arr, box, thickness=2, color=None, mode='default'):
+def draw_box(img_arr, box, thickness=2, color=None, mode="default"):
     h_img, w_img, c_img = img_arr.shape
     if color is None:
         color = (randint(), randint(), randint())
-    if mode == 'default':
+    if mode == "default":
         x, y, xx, yy = box
         x = int(max(0, x))
         xx = int(min(w_img, xx))
         y = int(max(0, y))
         yy = int(min(h_img, yy))
 
-    elif mode == 'coco':
+    elif mode == "coco":
         x, y, w, h = box
         x = int(max(0, x))
         w = int(min(w_img, x + w_img))
@@ -232,28 +234,30 @@ def draw_box(img_arr, box, thickness=2, color=None, mode='default'):
     cv2.rectangle(img_arr, (x, y), (xx, yy), color=color, thickness=thickness)
 
 
-def immulshow(list_img_arr: list,
-              list_subtitles: list = None,
-              ratio_size: int = 10,
-              rows: int = 1,
-              cmap: str = None,
-              plt_show: bool = True,
-              title: str = None,
-              show_colorbar: bool = False,
-              colorbar_fontsize: int = 15,
-              colorbar_color: str = 'black',
-              title_fontsize: int = 30,
-              title_color: int = 'black',
-              subtitle_fontsize: int = 20,
-              subtitle_color: str = 'black',
-              background_color: str = 'white',
-              show_grid: bool = False,
-              grid_color: str = 'black',
-              show_sticks: bool = False,
-              wspace=0.1,
-              hspace=0.1,
-              title_rel_pos=None,
-              subtitle_rel_pos=None):
+def immulshow(
+    list_img_arr: list,
+    list_subtitles: list = None,
+    ratio_size: int = 10,
+    rows: int = 1,
+    cmap: str = None,
+    plt_show: bool = True,
+    title: str = None,
+    show_colorbar: bool = False,
+    colorbar_fontsize: int = 15,
+    colorbar_color: str = "black",
+    title_fontsize: int = 30,
+    title_color: int = "black",
+    subtitle_fontsize: int = 20,
+    subtitle_color: str = "black",
+    background_color: str = "white",
+    show_grid: bool = False,
+    grid_color: str = "black",
+    show_sticks: bool = False,
+    wspace=0.1,
+    hspace=0.1,
+    title_rel_pos=None,
+    subtitle_rel_pos=None,
+):
     """Show multiple images in a plot.
 
     Parameters
@@ -276,15 +280,16 @@ def immulshow(list_img_arr: list,
 
     assert ratio_size >= 2, ValueError("ratio_size must be greater than 1")
     if len(list_img_arr) % rows != 0:
-        warnings.warn(
-            '`len(list_img_arr)` cannot be divided by rows.', stacklevel=0)
+        warnings.warn("`len(list_img_arr)` cannot be divided by rows.", stacklevel=0)
 
     columns = int(len(list_img_arr) / rows + 0.5)
-    ratio_cols_rows = columns/rows if columns >= rows else rows/columns
-    figsize = (int(ratio_size*ratio_cols_rows),
-               ratio_size) if columns >= rows else (ratio_size, int(ratio_size*ratio_cols_rows))
-    fig, list_axs = plt.subplots(nrows=rows, ncols=columns,
-                                 figsize=figsize)
+    ratio_cols_rows = columns / rows if columns >= rows else rows / columns
+    figsize = (
+        (int(ratio_size * ratio_cols_rows), ratio_size)
+        if columns >= rows
+        else (ratio_size, int(ratio_size * ratio_cols_rows))
+    )
+    fig, list_axs = plt.subplots(nrows=rows, ncols=columns, figsize=figsize)
 
     if rows == 1:
         # Convert to list of list for plotting purposes
@@ -297,10 +302,9 @@ def immulshow(list_img_arr: list,
     img = None
     for i in range(rows):
         for j in range(columns):
-            if i*columns + j < len(list_img_arr):
-                img = list_axs[i][j].imshow(
-                    list_img_arr[i*columns + j], cmap=cmap)
-                list_axs[i][j].set_aspect('equal')
+            if i * columns + j < len(list_img_arr):
+                img = list_axs[i][j].imshow(list_img_arr[i * columns + j], cmap=cmap)
+                list_axs[i][j].set_aspect("equal")
             else:
                 list_axs[i][j].set_facecolor(background_color)
 
@@ -313,15 +317,22 @@ def immulshow(list_img_arr: list,
 
             if list_subtitles is not None:
                 list_axs[i][j].set_title(
-                    list_subtitles[i*columns + j],
+                    list_subtitles[i * columns + j],
                     y=SUBTITLE_REL_POS,
                     fontsize=subtitle_fontsize,
-                    color=subtitle_color)
+                    color=subtitle_color,
+                )
 
     # fig.tight_layout()
     right_adjust = RIGHT_ADJ if show_colorbar else DEFAULT_ADJ
-    fig.subplots_adjust(left=DEFAULT_ADJ, bottom=DEFAULT_ADJ, right=right_adjust,
-                        top=DEFAULT_ADJ, wspace=wspace, hspace=hspace)
+    fig.subplots_adjust(
+        left=DEFAULT_ADJ,
+        bottom=DEFAULT_ADJ,
+        right=right_adjust,
+        top=DEFAULT_ADJ,
+        wspace=wspace,
+        hspace=hspace,
+    )
 
     if show_colorbar:
         # https: // stackoverflow.com/questions/13784201/how-to-have-one-colorbar-for-all-subplots
@@ -333,32 +344,34 @@ def immulshow(list_img_arr: list,
             t.set_color(colorbar_color)
 
     if title:
-        fig.suptitle(title, y=TITLE_REL_POS,
-                     fontsize=title_fontsize,
-                     color=title_color)
+        fig.suptitle(title, y=TITLE_REL_POS, fontsize=title_fontsize, color=title_color)
 
     if plt_show:
         plt.show()
 
 
-@deprecated('This function is deprecated and will be removed soon.'
-            ' Please use `mipkit.immulshow`')
-def show_multi_images(list_img_arr,
-                      list_titles=None,
-                      ratio_size=10,
-                      rows=1,
-                      cmap=None,
-                      plt_show=True,
-                      title=None,
-                      show_colorbar=False,
-                      colorbar_fontsize=20,
-                      fontsize=30,
-                      subfontsize=10,
-                      wspace=0,
-                      hspace=0,
-                      background_color='white',
-                      *args,
-                      **kwargs):
+@deprecated(
+    "This function is deprecated and will be removed soon."
+    " Please use `mipkit.immulshow`"
+)
+def show_multi_images(
+    list_img_arr,
+    list_titles=None,
+    ratio_size=10,
+    rows=1,
+    cmap=None,
+    plt_show=True,
+    title=None,
+    show_colorbar=False,
+    colorbar_fontsize=20,
+    fontsize=30,
+    subfontsize=10,
+    wspace=0,
+    hspace=0,
+    background_color="white",
+    *args,
+    **kwargs
+):
     """Show multiple images in a plot.
 
     Parameters
@@ -377,15 +390,14 @@ def show_multi_images(list_img_arr,
     assert ratio_size >= 2, ValueError("ratio_size must be greater than 1")
     columns = len(list_img_arr) // rows
 
-    fig = plt.figure(figsize=(int(ratio_size * columns),
-                              int((ratio_size / 2) * rows)))
+    fig = plt.figure(figsize=(int(ratio_size * columns), int((ratio_size / 2) * rows)))
     fig.set_facecolor(background_color)
     gs = gridspec.GridSpec(rows, columns, wspace=wspace, hspace=wspace)
 
     for i in range(1, columns * rows + 1):
         a = fig.add_subplot(rows, columns, i)
         plt.imshow(list_img_arr[i - 1], cmap=cmap)
-        a.set_aspect('equal')
+        a.set_aspect("equal")
         a.set_xticklabels([])
         a.set_yticklabels([])
 
@@ -412,13 +424,15 @@ def show_image_with_path(path, img_dir=None):
     if os.path.isfile(path):
         img_arr = read_image(path)
     else:
-        warnings.warn("Not found image from path `{}`".format(path),
-                      category=NotFoundWarning,
-                      stacklevel=2)
+        warnings.warn(
+            "Not found image from path `{}`".format(path),
+            category=NotFoundWarning,
+            stacklevel=2,
+        )
     return img_arr
 
 
-@deprecated('Please use `mipkit.imshow_with_paths`')
+@deprecated("Please use `mipkit.imshow_with_paths`")
 def show_image_with_paths(list_paths, rows=1, img_dir=None, **kwargs):
     list_img_arr = []
     for path in list_paths:

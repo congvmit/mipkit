@@ -27,7 +27,7 @@ from . import core
 from . import utils
 
 
-class TextCleaner():
+class TextCleaner:
     @utils.autoargs()
     def __init__(
         self,
@@ -36,7 +36,7 @@ class TextCleaner():
         lower=False,
         normalize_whitespace=True,
         no_line_breaks=False,
-        strip_lines=True,
+        strip_lines=False,
         keep_two_line_breaks=False,
         no_urls=False,
         no_emails=False,
@@ -48,8 +48,9 @@ class TextCleaner():
         no_emoji=False,
         no_contractions=False,
         no_website_links=False,
+        no_html_tags=False,
         no_stopwords=False,
-        no_extra_spaces=False, 
+        no_extra_spaces=False,
         ignore_puncts=[],
         replace_with_url="<URL>",
         replace_with_email="<EMAIL>",
@@ -83,7 +84,8 @@ class TextCleaner():
             no_contractions=self.no_contractions,
             no_website_links=self.no_website_links,
             no_stopwords=self.no_stopwords,
-            no_extra_spaces=self.no_extra_spaces, 
+            no_html_tags=self.no_html_tags,
+            no_extra_spaces=self.no_extra_spaces,
             ignore_puncts=self.ignore_puncts,
             replace_with_url=self.replace_with_url,
             replace_with_email=self.replace_with_email,
@@ -92,7 +94,8 @@ class TextCleaner():
             replace_with_digit=self.replace_with_digit,
             replace_with_currency_symbol=self.replace_with_currency_symbol,
             replace_with_punct=self.replace_with_punct,
-            lang=self.lang)
+            lang=self.lang,
+        )
 
     def __call__(self, text):
         return self.clean(text)

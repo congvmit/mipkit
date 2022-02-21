@@ -33,13 +33,12 @@ import IPython
 import ipdb
 import pdb
 import os
-import sys
-from inspect import getframeinfo, stack
-from .logging import print_warning
+from termcolor import colored, cprint
+import traceback
 
 
-class Debugger():
-    def __init__(self, method='ipython'):
+class Debugger:
+    def __init__(self, method="ipython"):
         """Debugger with available methods: ipdb, pdb or ipython
 
         Args:
@@ -48,18 +47,19 @@ class Debugger():
         self.tracer = self.init_tracer(method)
 
     def init_tracer(self, method):
-        assert method in ['ipdb', 'pdb', 'ipython']
-        if method == 'ipdb':
+        assert method in ["ipdb", "pdb", "ipython", "bpython"]
+        if method == "ipdb":
             return ipdb.set_trace
-        elif method == 'pdb':
+        elif method == "pdb":
             return pdb.set_trace
-        elif method == 'ipython':
+        elif method == "ipython":
             return IPython.embed
+        elif method == "bpython":
+            import bpython
+
+            return bpython.embed
 
     def set_trace(self, method=None):
-        # caller = getframeinfo(stack()[-1][0])
-        # print_warning(
-        #     f'Set trace is call from `{caller.filename}` at line: {caller.lineno}')
         if method is not None:
             self.tracer = self.init_tracer(method)
         return self.tracer
