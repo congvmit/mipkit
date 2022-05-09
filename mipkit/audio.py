@@ -28,7 +28,7 @@ import numpy as np
 from matplotlib import cm
 import pylab
 
-
+    
 def load_file(fp, sr=None):
     X, sr = librosa.load(fp, sr=sr)
     return X, sr

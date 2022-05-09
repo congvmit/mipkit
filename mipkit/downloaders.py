@@ -22,14 +22,10 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 """
-from pytube import YouTube
 from PIL import Image
-import io
-import numpy as np
 import urllib.request as urllib_request
 from io import BytesIO
 import time
-
 
 def download_img_with_url(url, retry=0, retry_gap=0.1, proxy=None):
     if proxy == None:
@@ -50,5 +46,9 @@ def download_img_with_url(url, retry=0, retry_gap=0.1, proxy=None):
 
 
 def download_from_youtube(output_path, video_id):
+    try:
+        from pytube import YouTube
+    except ImportError as e:
+        raise ImportError('No package `pytube`, cannot execute `download_from_youtube`.')
     yt = YouTube(f'https://youtu.be/watch?v={video_id}').streams.first().download(
         output_path=output_path, filename=video_id)

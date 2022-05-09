@@ -32,10 +32,6 @@
 import IPython
 import ipdb
 import pdb
-import os
-from termcolor import colored, cprint
-import traceback
-
 
 class Debugger:
     def __init__(self, method="ipython"):

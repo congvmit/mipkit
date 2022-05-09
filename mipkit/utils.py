@@ -22,26 +22,19 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 """
-
+import os
 import copy
-import sys
 import time
 import yaml
+import json
 import warnings
 import argparse
-from datetime import datetime
-import yaml
-import os
 import numpy as np
 from glob import glob
-import argparse
-from tqdm import tqdm as _tqdm
-import json
+from datetime import datetime
 from pathlib import Path
 from collections import OrderedDict
-import os
-from glob import glob
-
+from tqdm import tqdm as _tqdm
 
 def load_csv_and_sort(from_folder, sort_key, reverse=False):
     path_pattern = os.path.join(from_folder, "*.csv")
@@ -285,8 +278,12 @@ def save_config_as_yaml(
 def split_seq(seq, k=10):
     """Split a given sequence into `k` parts."""
     length = len(seq)
-    n_items = length // k + 1
-    return [seq[i * n_items : i * n_items + n_items] for i in range(k)]
+    if length % k != 0:
+        add_last = length % k
+    else:
+        add_last = 0
+    n_items = length // k
+    return [seq[i * n_items : (i * n_items + n_items + add_last) if i==(k-1) else (i * n_items + n_items)] for i in range(k)]
 
 
 def to_str_with_pad(number, n_char=0, pad_value=0):

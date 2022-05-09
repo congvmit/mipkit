@@ -15,3 +15,6 @@ ipdb
 IPython
 termcolor
 itk
+SimpleITK
+pydicom
+nibabel

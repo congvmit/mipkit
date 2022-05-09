@@ -30,7 +30,6 @@ import matplotlib.pyplot as plt
 import PIL
 import torch
 import torchvision.transforms.functional as F
-import torch
 from .utils import deprecated
 
 

@@ -22,14 +22,15 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 """
-
-# Pytorch Lightning Utils
-import pytorch_lightning as pl
-from argparse import ArgumentParser
-from argparse import Namespace
+from argparse import ArgumentParser, Namespace
 from .utils import load_yaml_config
 from .logger import print_info
-
+    
+# Pytorch Lightning Utils
+try:
+    import pytorch_lightning as pl
+except:
+    print('Missing `pytorch_lightning` package.')
 
 def parse_args(add_pl_args=True, is_notebook=False, print_args=True):
     parser = ArgumentParser()
