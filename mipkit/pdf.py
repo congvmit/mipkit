@@ -5,17 +5,12 @@ import re
 import argparse
 import os
 from tqdm import tqdm
+from .helpers import install_and_import
 
-try:
-    from PyPDF2 import PdfFileReader, PdfFileWriter
-    from PyPDF2.pdf import PageObject
-
-    # import PyPDF2 as fpdf
-    from PyPDF2.generic import FloatObject
-except ImportError:
-    raise ImportError(
-        "PyPDF2 requires to be installed in your machine. Please install it by `pip install PyPDF2`"
-    )
+install_and_import('PyDF2')
+from PyPDF2 import PdfFileReader, PdfFileWriter
+from PyPDF2.pdf import PageObject
+from PyPDF2.generic import FloatObject
 
 __VERSION__ = "1.0.0"
 

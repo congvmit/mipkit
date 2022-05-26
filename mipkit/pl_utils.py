@@ -25,12 +25,10 @@
 from argparse import ArgumentParser, Namespace
 from .utils import load_yaml_config
 from .logger import print_info
-    
-# Pytorch Lightning Utils
-try:
-    import pytorch_lightning as pl
-except:
-    print('Missing `pytorch_lightning` package.')
+from .helpers import install_and_import
+
+install_and_import('pytorch_lightning')
+import pytorch_lightning as pl
 
 def parse_args(add_pl_args=True, is_notebook=False, print_args=True):
     parser = ArgumentParser()

@@ -1,20 +1,20 @@
 numpy
 opencv-python
 matplotlib
-# torch
-# torchvision
-# ray[tune]
-# pytorch-lightning
-# tensorboard
-librosa
-pyyaml
-pytube
 tqdm
 Image
 ipdb
 IPython
 termcolor
-itk
-SimpleITK
-pydicom
-nibabel
+# itk
+# SimpleITK
+# pydicom
+# nibabel
+# torch
+# torchvision
+# ray[tune]
+# pytorch-lightning
+# tensorboard
+# pytube
+# librosa
+# pyyaml

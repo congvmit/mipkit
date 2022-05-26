@@ -31,6 +31,7 @@ from .downloaders import *
 from .logger import *
 # from .audio import *
 from .debug import *
+from .helpers import *
 # from . import video
 # from . import dl
 
