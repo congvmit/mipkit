@@ -22,16 +22,17 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 """
-
-from PIL import Image, ImageDraw
-import cv2
-import numpy as np
-import matplotlib.pyplot as plt
-import PIL
-import torch
-import torchvision.transforms.functional as F
-import torch
+import warnings
 from .utils import deprecated
+try:
+    import cv2
+    from PIL import Image, ImageDraw
+    import numpy as np
+    import PIL
+    import torchvision.transforms.functional as F
+except ImportError as e:
+    warnings.warn(e.msg)
+    
 
 
 def combine_images(images: list, axis=1):

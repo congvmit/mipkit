@@ -1,9 +1,11 @@
 from collections import OrderedDict
-# import pytorch_lightning as pl
-import torch
-import numpy as np
-import random
-
+import warnings
+try:
+    import torch
+    import numpy as np
+    import random
+except ImportError as e:
+    warnings.warn(e.msg)
 
 def convert_pymodule_to_flatten_dict(model):
     all_layers = OrderedDict()

@@ -23,7 +23,12 @@
  THE SOFTWARE.
 """
 
-import numpy as np
+import warnings
+try:
+    import numpy as np
+    
+except ImportError as e:
+    warnings.warn(e.msg)
 
 
 def show_stats(np_arr, return_stats=False, verbose=True):

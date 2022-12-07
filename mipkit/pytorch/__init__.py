@@ -22,10 +22,12 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 """
-
+import warnings
 try:
     import torch
-except:
-    raise ImportError("Cannot import `torch`. Please install the pytorch.")
-from .hook import *
-from .utils import *
+    from . import hook
+    from . import utils
+except ImportError as e:
+    warnings.warn(e.msg)
+    
+

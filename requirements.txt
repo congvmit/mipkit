@@ -1,17 +1,17 @@
 numpy
-opencv-python
 matplotlib
+# Image
+# opencv-python
 # torch
 # torchvision
 # ray[tune]
 # pytorch-lightning
 # tensorboard
-librosa
-pyyaml
-pytube
-tqdm
-Image
+# librosa
+# pytube
+# tqdm
+# termcolor
+# itk
+# pyyaml
 ipdb
 IPython
-termcolor
-itk

@@ -29,13 +29,6 @@
 # References
 # [1] https://stackoverflow.com/questions/16867347/step-by-step-debugging-with-ipython
 # ===============================================================================
-import IPython
-import ipdb
-import pdb
-import os
-from termcolor import colored, cprint
-import traceback
-
 
 class Debugger:
     def __init__(self, method="ipython"):
@@ -49,14 +42,16 @@ class Debugger:
     def init_tracer(self, method):
         assert method in ["ipdb", "pdb", "ipython", "bpython"]
         if method == "ipdb":
+            import ipdb
             return ipdb.set_trace
         elif method == "pdb":
+            import pdb
             return pdb.set_trace
         elif method == "ipython":
+            import IPython
             return IPython.embed
         elif method == "bpython":
             import bpython
-
             return bpython.embed
 
     def set_trace(self, method=None):

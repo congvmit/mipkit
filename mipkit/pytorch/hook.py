@@ -1,8 +1,11 @@
-import torch.nn as nn
+import warnings
 from collections import OrderedDict
 from .utils import convert_pymodule_to_flatten_dict
 from ..logger import turn_red
-import warnings
+try:
+    import torch.nn as nn
+except ImportError as e:
+    warnings.warn(e.msg)
 
 
 class PytorchHook(nn.Module):

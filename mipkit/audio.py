@@ -22,13 +22,15 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 """
-
-import librosa
-import numpy as np
-from matplotlib import cm
-import pylab
-
-
+import warnings
+try:
+    import librosa
+    import numpy as np
+    from matplotlib import cm
+    import pylab
+except ImportError as e:
+    warnings.warn(e.msg)
+    
 def load_file(fp, sr=None):
     X, sr = librosa.load(fp, sr=sr)
     return X, sr

@@ -24,12 +24,15 @@
 """
 
 import os
-import matplotlib.pyplot as plt
-from matplotlib import gridspec
-import cv2
-import numpy as np
 import warnings
-import pylab
+try:
+    import matplotlib.pyplot as plt
+    from matplotlib import gridspec
+    import cv2
+    import numpy as np
+    import pylab
+except ImportError as e:
+    warnings.warn(e.msg)
 
 from .images import read_image
 from .utils import deprecated, NotFoundWarning

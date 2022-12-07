@@ -22,10 +22,12 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 """
-
-from termcolor import cprint, colored
+import warnings
 import logging
-
+try:
+    from termcolor import cprint, colored
+except ImportError as e:
+    warnings.warn(e.msg)
 
 def get_logger():
     logger = logging.getLogger()

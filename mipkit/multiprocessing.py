@@ -25,10 +25,22 @@
 
 from multiprocessing import Pool, cpu_count
 from multiprocessing.pool import ThreadPool
-from tqdm import tqdm
+import warnings
+try:
+    from tqdm import tqdm
+except ImportError as e:
+    warnings.warn(e.msg)
 
 
-def pool_worker(target, inputs, use_thread=False, num_worker=None, verbose=True):
+def pool_worker(
+    target,
+    inputs,
+    use_thread=False,
+    num_worker=None,
+    verbose=True,
+    tqdm_desc="",
+    tqdm_pos=0,
+):
     """Run target function in multi-process
 
     Parameters
@@ -59,7 +71,14 @@ def pool_worker(target, inputs, use_thread=False, num_worker=None, verbose=True)
     if num_worker != 1:
         if verbose:
             with pool_use(num_worker) as p:
-                res = list(tqdm(p.imap(target, inputs), total=len(inputs)))
+                res = list(
+                    tqdm(
+                        p.imap(target, inputs),
+                        total=len(inputs),
+                        desc=tqdm_desc,
+                        position=tqdm_pos,
+                    )
+                )
         else:
             with pool_use(num_worker) as p:
                 res = p.map(target, inputs)
