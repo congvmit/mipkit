@@ -1,32 +1,36 @@
 # This package is inspired from `https://github.com/sksq96/pytorch-summary/blob/master/torchsummary/torchsummary.py``
 import typing
+from collections import OrderedDict
+
+import numpy as np
 import torch
 import torch.nn as nn
-from collections import OrderedDict
-import numpy as np
 
 
-def summary(model: nn.Module,
-            input_size: typing.List,
-            batch_size=-1,
-            device=torch.device('cuda:0'),
-            dtypes=None):
-    result, params_info = summary_string(model, input_size, batch_size, device,
-                                         dtypes)
+def summary(
+    model: nn.Module,
+    input_size: typing.List,
+    batch_size=-1,
+    device=torch.device("cuda:0"),
+    dtypes=None,
+):
+    result, params_info = summary_string(model, input_size, batch_size, device, dtypes)
     print(result)
 
     return params_info
 
 
-def summary_string(model: nn.Module,
-                   input_size: typing.List,
-                   batch_size: int = -1,
-                   device: torch.DeviceObjType = torch.device('cuda'),
-                   dtypes: torch.TensorType = None):
+def summary_string(
+    model: nn.Module,
+    input_size: typing.List,
+    batch_size: int = -1,
+    device: torch.DeviceObjType = torch.device("cuda"),
+    dtypes: torch.TensorType = None,
+):
     if dtypes == None:
         dtypes = [torch.FloatTensor] * len(input_size)
 
-    summary_str = ''
+    summary_str = ""
 
     def register_hook(module):
         def hook(module, input, output):
@@ -38,24 +42,24 @@ def summary_string(model: nn.Module,
             summary[m_key]["input_shape"] = list(input[0].size())
             summary[m_key]["input_shape"][0] = batch_size
             if isinstance(output, (list, tuple)):
-                summary[m_key]["output_shape"] = [[-1] + list(o.size())[1:]
-                                                  for o in output]
+                summary[m_key]["output_shape"] = [
+                    [-1] + list(o.size())[1:] for o in output
+                ]
             else:
                 summary[m_key]["output_shape"] = list(output.size())
                 summary[m_key]["output_shape"][0] = batch_size
 
             params = 0
             if hasattr(module, "weight") and hasattr(module.weight, "size"):
-                params += torch.prod(
-                    torch.LongTensor(list(module.weight.size())))
+                params += torch.prod(torch.LongTensor(list(module.weight.size())))
                 summary[m_key]["trainable"] = module.weight.requires_grad
             if hasattr(module, "bias") and hasattr(module.bias, "size"):
-                params += torch.prod(torch.LongTensor(list(
-                    module.bias.size())))
+                params += torch.prod(torch.LongTensor(list(module.bias.size())))
             summary[m_key]["nb_params"] = params
 
-        if (not isinstance(module, nn.Sequential)
-                and not isinstance(module, nn.ModuleList)):
+        if not isinstance(module, nn.Sequential) and not isinstance(
+            module, nn.ModuleList
+        ):
             hooks.append(module.register_forward_hook(hook))
 
     # multiple inputs to the network
@@ -83,11 +87,14 @@ def summary_string(model: nn.Module,
     for h in hooks:
         h.remove()
 
-    summary_str += "----------------------------------------------------------------" + "\n"
-    line_new = "{:>20}  {:>25} {:>15}".format("Layer (type)", "Output Shape",
-                                              "Param #")
+    summary_str += (
+        "----------------------------------------------------------------" + "\n"
+    )
+    line_new = "{:>20}  {:>25} {:>15}".format("Layer (type)", "Output Shape", "Param #")
     summary_str += line_new + "\n"
-    summary_str += "================================================================" + "\n"
+    summary_str += (
+        "================================================================" + "\n"
+    )
     total_params = 0
     total_output = 0
     trainable_params = 0
@@ -108,22 +115,31 @@ def summary_string(model: nn.Module,
 
     # assume 4 bytes/number (float on cuda).
     total_input_size = abs(
-        np.prod(sum(input_size, ())) * batch_size * 4. / (1024**2.))
-    total_output_size = abs(2. * total_output * 4. /
-                            (1024**2.))  # x2 for gradients
-    total_params_size = abs(total_params * 4. / (1024**2.))
+        np.prod(sum(input_size, ())) * batch_size * 4.0 / (1024**2.0)
+    )
+    total_output_size = abs(
+        2.0 * total_output * 4.0 / (1024**2.0)
+    )  # x2 for gradients
+    total_params_size = abs(total_params * 4.0 / (1024**2.0))
     total_size = total_params_size + total_output_size + total_input_size
 
-    summary_str += "================================================================" + "\n"
+    summary_str += (
+        "================================================================" + "\n"
+    )
     summary_str += "Total params: {0:,}".format(total_params) + "\n"
     summary_str += "Trainable params: {0:,}".format(trainable_params) + "\n"
-    summary_str += "Non-trainable params: {0:,}".format(
-        total_params - trainable_params) + "\n"
-    summary_str += "----------------------------------------------------------------" + "\n"
+    summary_str += (
+        "Non-trainable params: {0:,}".format(total_params - trainable_params) + "\n"
+    )
+    summary_str += (
+        "----------------------------------------------------------------" + "\n"
+    )
     summary_str += "Input size (MB): %0.2f" % total_input_size + "\n"
     summary_str += "Forward/backward pass size (MB): %0.2f" % total_output_size + "\n"
     summary_str += "Params size (MB): %0.2f" % total_params_size + "\n"
     summary_str += "Estimated Total Size (MB): %0.2f" % total_size + "\n"
-    summary_str += "----------------------------------------------------------------" + "\n"
+    summary_str += (
+        "----------------------------------------------------------------" + "\n"
+    )
     # return summary
     return summary_str, (total_params, trainable_params)

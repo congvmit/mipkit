@@ -1,35 +1,35 @@
 """
- The MIT License (MIT)
- Copyright (c) 2021 Cong Vo
- 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
- 
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
- 
- Provided license texts might have their own copyrights and restrictions
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
+The MIT License (MIT)
+Copyright (c) 2021 Cong Vo
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+Provided license texts might have their own copyrights and restrictions
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
 """
 
-import numpy as np
 import cv2
+import numpy as np
 
 
 def fft(img: np.ndarray, is_shift=True, use_cv2=True):
     """Fourier transform the image and return the frequency matrix after transposition"""
-    assert img.ndim == 2, 'img should be gray.'
+    assert img.ndim == 2, "img should be gray."
     rows, cols = img.shape[:2]
 
     # Calculate the optimal size
@@ -60,7 +60,7 @@ def to_fft_image(fft_mat, is_shift=False):
     """Convert frequency matrix to visual image"""
     if is_shift:
         fft_mat = np.fft.fftshift(fft_mat)
-    log_mat = 20*np.log(np.abs(fft_mat))
+    log_mat = 20 * np.log(np.abs(fft_mat))
     return np.uint8(np.around(log_mat))
 
 
@@ -70,7 +70,7 @@ def ifft(fft_mat, rows, cols):
     Args:
         fft_mat (ndarray]): fft matrix
         rows (int): the height of the original image
-        cols (int): the width of the original image 
+        cols (int): the width of the original image
 
     Returns:
         ndarray: inversed image
@@ -88,10 +88,8 @@ def ifft(fft_mat, rows, cols):
 
 def fft_distances(m, n):
     """Calculate the distance of each point of the m, n matrix from the center"""
-    u = np.array([i if i <= m / 2 else m - i for i in range(m)],
-                 dtype=np.float32)
-    v = np.array([i if i <= m / 2 else m - i for i in range(m)],
-                 dtype=np.float32)
+    u = np.array([i if i <= m / 2 else m - i for i in range(m)], dtype=np.float32)
+    v = np.array([i if i <= m / 2 else m - i for i in range(m)], dtype=np.float32)
     v.shape = n, 1
 
     # The distance from each point to the upper left corner of the matrix

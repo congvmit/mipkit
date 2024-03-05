@@ -1,39 +1,40 @@
 """
- The MIT License (MIT)
- Copyright (c) 2021 Cong Vo
- 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
- 
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
- 
- Provided license texts might have their own copyrights and restrictions
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
+The MIT License (MIT)
+Copyright (c) 2021 Cong Vo
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+Provided license texts might have their own copyrights and restrictions
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
 """
-import os
-import copy
-import time
-import yaml
-import json
-import warnings
 import argparse
-import numpy as np
-from glob import glob
-from datetime import datetime
-from pathlib import Path
+import copy
+import json
+import os
+import time
+import warnings
 from collections import OrderedDict
+from datetime import datetime
+from glob import glob
+from pathlib import Path
+
+import numpy as np
+import yaml
 
 try:
     from tqdm import tqdm as _tqdm
@@ -118,6 +119,7 @@ def generate_datetime():
 
 
 class ArgSpace(dict):
+
     def __getattr__(self, attr):
         if attr == "__getstate__":
             return super(DD, self).__getstate__
@@ -288,7 +290,14 @@ def split_seq(seq, k=10):
     else:
         add_last = 0
     n_items = length // k
-    return [seq[i * n_items : (i * n_items + n_items + add_last) if i==(k-1) else (i * n_items + n_items)] for i in range(k)]
+    return [
+        seq[
+            i * n_items : (i * n_items + n_items + add_last)
+            if i == (k - 1)
+            else (i * n_items + n_items)
+        ]
+        for i in range(k)
+    ]
 
 
 def to_str_with_pad(number, n_char=0, pad_value=0):

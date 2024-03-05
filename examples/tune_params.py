@@ -1,44 +1,44 @@
 """
- The MIT License (MIT)
- Copyright (c) 2021 Cong Vo
- 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
- 
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
- 
- Provided license texts might have their own copyrights and restrictions
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
+The MIT License (MIT)
+Copyright (c) 2021 Cong Vo
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+Provided license texts might have their own copyrights and restrictions
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
 """
 
-from torchvision import transforms
-from torchvision.datasets import MNIST
-from torch.nn import functional as F
-from torch.utils.data import DataLoader, random_split
-import os
-import torch
-import pytorch_lightning as pl
+import gc
 import math
+import os
 
+import pytorch_lightning as pl
+import torch
 from ray import tune
 from ray.tune.integration.pytorch_lightning import TuneReportCallback
+from torch.nn import functional as F
+from torch.utils.data import DataLoader, random_split
+from torchvision import transforms
+from torchvision.datasets import MNIST
 
-from mipkit.utils import generate_datetime
 from mipkit.dl.tune import start_tuning
+from mipkit.utils import generate_datetime
 
-import gc
 gc.collect()
 torch.cuda.empty_cache()
 
@@ -113,28 +113,30 @@ class LightningMNISTClassifier(pl.LightningModule):
 
     @staticmethod
     def download_data(data_dir):
-        transform = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize((0.1307, ), (0.3081, ))
-        ])
+        transform = transforms.Compose(
+            [transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))]
+        )
         return MNIST(data_dir, train=True, download=False, transform=transform)
 
     def prepare_data(self):
         mnist_train = self.download_data(self.data_dir)
 
-        self.mnist_train, self.mnist_val = random_split(
-            mnist_train, [55000, 5000])
+        self.mnist_train, self.mnist_val = random_split(mnist_train, [55000, 5000])
 
     def train_dataloader(self):
-        return DataLoader(self.mnist_train, batch_size=int(self.batch_size), num_workers=4)
+        return DataLoader(
+            self.mnist_train, batch_size=int(self.batch_size), num_workers=4
+        )
 
     def val_dataloader(self):
-        return DataLoader(self.mnist_val, batch_size=int(self.batch_size), num_workers=4)
+        return DataLoader(
+            self.mnist_val, batch_size=int(self.batch_size), num_workers=4
+        )
 
     def configure_optimizers(self):
-        if self.opt == 'adam':
+        if self.opt == "adam":
             optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)
-        elif self.opt == 'sgd':
+        elif self.opt == "sgd":
             optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)
         return optimizer
 
@@ -146,28 +148,26 @@ def train_mnist_tune(tuning_config, data_dir=None, num_epochs=10, num_gpus=1):
     # ===============================================================================
     # Callback
     # ===============================================================================
-    from pytorch_lightning.callbacks import ModelCheckpoint
-    from pytorch_lightning.callbacks import EarlyStopping
+    from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
 
-    early_stop_cb = EarlyStopping(monitor='ptl/val_loss',
-                                  patience=5,
-                                  verbose=True, mode='min')
+    early_stop_cb = EarlyStopping(
+        monitor="ptl/val_loss", patience=5, verbose=True, mode="min"
+    )
 
-    ckpt_cb = ModelCheckpoint(tune.get_trial_dir() + '/checkpoints',
-                              save_top_k=5,
-                              verbose=True,
-                              monitor='ptl/val_loss',
-                              mode='min',
-                              save_last=True,
-                              filename='model_{epoch:03d}-{step}'
-                              )
+    ckpt_cb = ModelCheckpoint(
+        tune.get_trial_dir() + "/checkpoints",
+        save_top_k=5,
+        verbose=True,
+        monitor="ptl/val_loss",
+        mode="min",
+        save_last=True,
+        filename="model_{epoch:03d}-{step}",
+    )
 
     tune_rp_cb = TuneReportCallback(
-        {
-            "val_loss": "ptl/val_loss",
-            "val_accuracy": "ptl/val_accuracy"
-        },
-        on="validation_end")
+        {"val_loss": "ptl/val_loss", "val_accuracy": "ptl/val_accuracy"},
+        on="validation_end",
+    )
 
     # ===============================================================================
     # Trainer
@@ -177,45 +177,44 @@ def train_mnist_tune(tuning_config, data_dir=None, num_epochs=10, num_gpus=1):
         max_epochs=num_epochs,
         # If fractional GPUs passed in, convert to int.
         gpus=math.ceil(num_gpus),
-        callbacks=[ckpt_cb, tune_rp_cb, early_stop_cb])
+        callbacks=[ckpt_cb, tune_rp_cb, early_stop_cb],
+    )
 
     trainer.logger._default_hp_metric = False  # hp_metrc must be False
     trainer.fit(model)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # ===============================================================================
     # Start Process
     # ===============================================================================
 
-    train_config = {
-        'data_dir': '<data_path>',
-        'num_epochs': 40,
-        'num_gpus': 1
-    }
+    train_config = {"data_dir": "<data_path>", "num_epochs": 40, "num_gpus": 1}
 
     tuning_config = {
         "layer_1_size": tune.choice([32, 64, 128]),
         "layer_2_size": tune.choice([64, 128, 256]),
         "lr": tune.loguniform(1e-4, 1e-2),
         "batch_size": tune.choice([32, 64, 128]),
-        "opt": tune.choice(['adam', 'sgd'])
+        "opt": tune.choice(["adam", "sgd"]),
     }
 
-    log_dir = 'experiments'
-    experiment_name = 'tune_mnist_asha_' + generate_datetime()
+    log_dir = "experiments"
+    experiment_name = "tune_mnist_asha_" + generate_datetime()
 
     metric_columns = ["val_loss", "val_accuracy", "training_iteration"]
 
-    start_tuning(tuning_config=tuning_config,
-                 train_config=train_config,
-                 training_func=train_mnist_tune,
-                 report_metric_columns=metric_columns,
-                 monitor_metric='val_loss',
-                 monitor_mode='min',
-                 log_dir=log_dir,
-                 experiment_name=experiment_name,
-                 num_epochs=20,
-                 num_samples=2,
-                 cpus_per_trial=2,  # Optimize with num_workers args
-                 gpus_per_trial=0.2)
+    start_tuning(
+        tuning_config=tuning_config,
+        train_config=train_config,
+        training_func=train_mnist_tune,
+        report_metric_columns=metric_columns,
+        monitor_metric="val_loss",
+        monitor_mode="min",
+        log_dir=log_dir,
+        experiment_name=experiment_name,
+        num_epochs=20,
+        num_samples=2,
+        cpus_per_trial=2,  # Optimize with num_workers args
+        gpus_per_trial=0.2,
+    )

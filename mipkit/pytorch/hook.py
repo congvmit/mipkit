@@ -1,7 +1,9 @@
 import warnings
 from collections import OrderedDict
-from .utils import convert_pymodule_to_flatten_dict
+
 from ..logger import turn_red
+from .utils import convert_pymodule_to_flatten_dict
+
 try:
     import torch.nn as nn
 except ImportError as e:
@@ -9,11 +11,12 @@ except ImportError as e:
 
 
 class PytorchHook(nn.Module):
+
     def __init__(self, model, output_layers, *args, **kwargs):
         """Forward Hook is to extract outputs from specific layers.
 
         Args:
-            model (torch.Module): 
+            model (torch.Module):
             output_layers ([type]): [description]
         """
         super().__init__(*args, **kwargs)
@@ -47,30 +50,33 @@ class PytorchHook(nn.Module):
     def _hook_func(self, layer_name):
         def hook(module, input, output):
             self.layer_outputs[layer_name] = output
+
         return hook
 
 
 class ForwardHook(PytorchHook):
+
     def register_hook(self):
         for layer_name in self.output_layers:
             layer_module = self.model_dict.get(layer_name, None)
             if layer_module is None:
-                message = turn_red(f'Not found layer name `{layer_name}`')
+                message = turn_red(f"Not found layer name `{layer_name}`")
                 warnings.warn(message)
                 continue
             self.hook_handles.append(
-                layer_module.register_forward_hook(
-                    self._hook_func(layer_name)))
+                layer_module.register_forward_hook(self._hook_func(layer_name))
+            )
 
 
 class BackwardHook(PytorchHook):
+
     def register_hook(self):
         for layer_name in self.output_layers:
             layer_module = self.model_dict.get(layer_name, None)
             if layer_module is None:
-                message = turn_red(f'Not found layer name `{layer_name}`')
+                message = turn_red(f"Not found layer name `{layer_name}`")
                 warnings.warn(message)
                 continue
             self.hook_handles.append(
-                layer_module.register_backward_hook(
-                    self._hook_func(layer_name)))
+                layer_module.register_backward_hook(self._hook_func(layer_name))
+            )

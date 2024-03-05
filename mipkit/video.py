@@ -1,12 +1,12 @@
-
-from typing import Tuple, Dict, List
 import warnings
+from typing import Dict, List, Tuple
 
 try:
     import cv2
     import numpy as np
 except ImportError as e:
     warnings.warn(e.msg)
+
 
 def load_video(video_file: str) -> Tuple["videocapture", Tuple[int, int], int, int]:
     """Load a video from the specified file.
@@ -28,19 +28,19 @@ def load_video(video_file: str) -> Tuple["videocapture", Tuple[int, int], int, i
     return cap, (width, height), num_frames, fps
 
 
-def get_frame_by_idx(cap: "VideoCapture", idx: str='middle') -> "ndarray":
+def get_frame_by_idx(cap: "VideoCapture", idx: str = "middle") -> "ndarray":
     if not isinstance(idx, int):
-        assert idx in ['middle', 'first', 'last']
+        assert idx in ["middle", "first", "last"]
 
     num_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    if idx == 'middle':
+    if idx == "middle":
         idx = num_frames // 2
-    elif idx == 'first':
+    elif idx == "first":
         idx = 0
-    elif idx == 'last':
+    elif idx == "last":
         idx = num_frames - 1
     if idx > num_frames:
-        raise ValueError('`frame_idx` must be less than a number of frames')
+        raise ValueError("`frame_idx` must be less than a number of frames")
 
     return_frames = None
 
@@ -51,7 +51,7 @@ def get_frame_by_idx(cap: "VideoCapture", idx: str='middle') -> "ndarray":
     return return_frames
 
 
-def get_frames_by_FPS(cap: "VideoCapture", fps: int=1) -> List["ndarray"]:
+def get_frames_by_FPS(cap: "VideoCapture", fps: int = 1) -> List["ndarray"]:
     """Get frames from video given by FPS and
 
     Args:

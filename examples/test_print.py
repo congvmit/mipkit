@@ -1,3 +1,3 @@
 import mipkit
 
-mipkit.print_error('Could not', 'load', 1)
+mipkit.print_error("Could not", "load", 1)

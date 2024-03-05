@@ -1,16 +1,18 @@
-import six
-import pkg_resources
-import sys
-import re
 import argparse
 import os
+import re
+import sys
+
+import pkg_resources
+import six
 from tqdm import tqdm
+
 from .helpers import install_and_import
 
-install_and_import('PyDF2')
+install_and_import("PyDF2")
 from PyPDF2 import PdfFileReader, PdfFileWriter
-from PyPDF2.pdf import PageObject
 from PyPDF2.generic import FloatObject
+from PyPDF2.pdf import PageObject
 
 __VERSION__ = "1.0.0"
 
