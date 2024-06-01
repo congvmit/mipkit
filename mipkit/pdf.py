@@ -9,12 +9,12 @@ from tqdm import tqdm
 
 from .helpers import install_and_import
 
-install_and_import("PyDF2")
+install_and_import("PyDF2", required_version='2.12.1')
 from PyPDF2 import PdfFileReader, PdfFileWriter
 from PyPDF2.generic import FloatObject
-from PyPDF2.pdf import PageObject
+from PyPDF2 import PageObject
 
-__VERSION__ = "1.0.0"
+__VERSION__ = "1.1.0"
 
 
 def version():
@@ -50,16 +50,16 @@ def expand_margin(
             page = p.getPage(i)
 
             new_page = writer.addBlankPage(
-                page.mediaBox.getWidth() + 2 * expected_margin,
-                page.mediaBox.getHeight(),
+                float(page.mediaBox.getWidth()) + 2 * expected_margin,
+                float(page.mediaBox.getHeight()),
             )
 
             new_page.mergePage(page)
 
             # x, y, x1, y2
             bbox = new_page.mediaBox.getObject()
-            bbox[0] = FloatObject(bbox[0] - expected_margin)
-            bbox[2] = FloatObject(bbox[2] - expected_margin)
+            bbox[0] = FloatObject(float(bbox[0]) - expected_margin)
+            bbox[2] = FloatObject(float(bbox[2]) - expected_margin)
 
             # page.scaleTo(int(page.mediaBox.getWidth()),
             #              int(page.mediaBox.getHeight()))
@@ -92,7 +92,7 @@ def main():
         help="url or file/folder id (with --id) to download from",
     )
     parser.add_argument("-o", "--output", help="output file name / path")
-    parser.add_argument("--margin", help="margin size to expand", default=100)
+    parser.add_argument("--margin", help="margin size to expand", default=100, type=float)
     parser.add_argument("-q", "--quiet", action="store_true", help="Show progress bar")
 
     args = parser.parse_args()
@@ -110,7 +110,7 @@ def main():
             expand_margin(
                 path_to_load=args.path,
                 path_to_save=None,
-                expected_margin=100,
+                expected_margin=args.margin,
                 overwrite=False,
             )
 
