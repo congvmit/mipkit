@@ -74,9 +74,7 @@ def figure_pylab(figsize=(10, 5), wspace=None, hspace=None, show=False):
     return plot_decorator
 
 
-def imshow(
-    img, figsize=(10, 10), plt_show=False, title=None, fontsize=30, *args, **kwargs
-):
+def imshow(img, figsize=(10, 10), plt_show=False, title=None, fontsize=30, *args, **kwargs):
     return show_image(
         img=img,
         figsize=figsize,
@@ -84,13 +82,11 @@ def imshow(
         title=title,
         fontsize=fontsize,
         *args,
-        **kwargs
+        **kwargs,
     )
 
 
-def show_image(
-    img, figsize=(10, 10), plt_show=False, title=None, fontsize=30, *args, **kwargs
-):
+def show_image(img, figsize=(10, 10), plt_show=False, title=None, fontsize=30, *args, **kwargs):
     plt.figure(figsize=figsize)
     plt.axis("off")
     plt.imshow(img, *args, **kwargs)
@@ -204,18 +200,14 @@ def randint(val_min=0, val_max=255):
     return np.random.randint(val_min, val_max)
 
 
-@deprecated(
-    message="draw_boxes() function is deprecated. Please use visualize() instead."
-)
+@deprecated(message="draw_boxes() function is deprecated. Please use visualize() instead.")
 def draw_boxes(img_arr, bboxes, color=None, thickness=2, mode="default"):
     assert mode in ["default", "coco"]
     for box in bboxes:
         draw_box(img_arr, box, color=color, thickness=thickness, mode=mode)
 
 
-@deprecated(
-    message="draw_box() function is deprecated. Please use visualize() instead."
-)
+@deprecated(message="draw_box() function is deprecated. Please use visualize() instead.")
 def draw_box(img_arr, box, thickness=2, color=None, mode="default"):
     h_img, w_img, c_img = img_arr.shape
     if color is None:
@@ -355,8 +347,7 @@ def immulshow(
 
 
 @deprecated(
-    "This function is deprecated and will be removed soon."
-    " Please use `mipkit.immulshow`"
+    "This function is deprecated and will be removed soon." " Please use `mipkit.immulshow`"
 )
 def show_multi_images(
     list_img_arr,
@@ -374,7 +365,7 @@ def show_multi_images(
     hspace=0,
     background_color="white",
     *args,
-    **kwargs
+    **kwargs,
 ):
     """Show multiple images in a plot.
 

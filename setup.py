@@ -29,7 +29,7 @@ from setuptools import find_packages, setup
 
 __author__ = "Cong M. Vo"
 __author_email__ = "congvm.it@gmail.com"
-__version__ = "1.6.4"
+__version__ = "1.7.0"
 
 with open("requirements.txt") as f:
     requirements = f.read().splitlines()
@@ -54,5 +54,10 @@ setup(
         "Operating System :: OS Independent",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
     ),
-    entry_points={"console_scripts": ["expandPDF=mipkit.pdf:main"]},
+    entry_points={
+        "console_scripts": [
+            "expandPDF=mipkit.pdf:main",
+            "pyfmt=mipkit.fmt:main",
+        ]
+    },
 )

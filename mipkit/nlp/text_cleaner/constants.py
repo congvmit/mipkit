@@ -47,9 +47,7 @@ CURRENCIES = {
     "₴": "UAH",
     "₹": "INR",
 }
-CURRENCY_REGEX = re.compile(
-    "({})+".format("|".join(re.escape(c) for c in CURRENCIES.keys()))
-)
+CURRENCY_REGEX = re.compile("({})+".format("|".join(re.escape(c) for c in CURRENCIES.keys())))
 
 PUNCT_TRANSLATE_UNICODE = dict.fromkeys(
     (i for i in range(sys.maxunicode) if unicodedata.category(chr(i)).startswith("P")),

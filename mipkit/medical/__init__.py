@@ -22,13 +22,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
+import warnings
+
 try:
     import itk
-except:
-    raise ImportError(
-        "Cannot import `itk`. Please install the itk by `pip install itk`."
-    )
 
-from .itk_snap import *
-from .utils import *
-from .vis import *
+    from .itk_snap import *
+    from .utils import *
+    from .vis import *
+except Exception as e:
+    warnings.warn("Cannot import `itk`. Please install the itk by `pip install itk`.")

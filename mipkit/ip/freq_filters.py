@@ -55,9 +55,7 @@ def laplacian_filter(fft_mat, d0=10, r1=0.5, rh=2, c=4, h=2.0, l=0.5):
     rows, cols = fft_mat.shape[:2]
 
     Huv = np.zeros_like(fft_mat)
-    M, N = np.meshgrid(
-        np.arange(-cols // 2, cols // 2), np.arange(-rows // 2, rows // 2)
-    )
+    M, N = np.meshgrid(np.arange(-cols // 2, cols // 2), np.arange(-rows // 2, rows // 2))
     # Huv = -((M - M//2) ** 2 + (N - N//2) ** 2)
     Huv = get_H(rows, cols)
 
@@ -90,9 +88,7 @@ def homomorphic_filter(fft_mat, d0=10, r1=0.5, rh=2, c=4, h=2.0, l=0.5):
     rows, cols = fft_mat.shape[:2]
 
     Huv = np.zeros_like(fft_mat)
-    M, N = np.meshgrid(
-        np.arange(-cols // 2, cols // 2), np.arange(-rows // 2, rows // 2)
-    )
+    M, N = np.meshgrid(np.arange(-cols // 2, cols // 2), np.arange(-rows // 2, rows // 2))
     Duv = np.sqrt(M**2 + N**2)
 
     # Gaussian high-pass filter
@@ -220,18 +216,14 @@ def combine_images(images: list, axis=1):
     """
     ndim = images[0].ndim
     shapes = np.array([mat.shape for mat in images])
-    assert np.all(
-        map(lambda e: len(e) == ndim, shapes)
-    ), "all images should be same ndim."
+    assert np.all(map(lambda e: len(e) == ndim, shapes)), "all images should be same ndim."
     if axis == 0:  # merge images vertically
         # Merge image cols
         cols = np.max(shapes[:, 1])
 
         # Expand the cols size of each image to make the cols consistent
         copy_imgs = [
-            cv2.copyMakeBorder(
-                img, 0, 0, 0, cols - img.shape[1], cv2.BORDER_CONSTANT, (0, 0, 0)
-            )
+            cv2.copyMakeBorder(img, 0, 0, 0, cols - img.shape[1], cv2.BORDER_CONSTANT, (0, 0, 0))
             for img in images
         ]
         # Merge vertically
@@ -243,9 +235,7 @@ def combine_images(images: list, axis=1):
 
         # Expand the row size of each image to make rows consistent
         copy_imgs = [
-            cv2.copyMakeBorder(
-                img, 0, rows - img.shape[0], 0, 0, cv2.BORDER_CONSTANT, (0, 0, 0)
-            )
+            cv2.copyMakeBorder(img, 0, rows - img.shape[0], 0, 0, cv2.BORDER_CONSTANT, (0, 0, 0))
             for img in images
         ]
 

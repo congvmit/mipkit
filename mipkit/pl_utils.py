@@ -22,6 +22,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
+
 from argparse import ArgumentParser, Namespace
 
 from .helpers import install_and_import
@@ -40,9 +41,7 @@ def parse_args(add_pl_args=True, is_notebook=False, print_args=True):
     # ===============================================================================
     parser.add_argument("--mode", choices=["train", "test"], type=str, default="train")
     parser.add_argument("-c", "--config_file", type=str, help="configuration file")
-    parser.add_argument(
-        "-j", "--num_workers", type=int, default=8, help="number of workers"
-    )
+    parser.add_argument("-j", "--num_workers", type=int, default=8, help="number of workers")
 
     # ===============================================================================
     # Learing Rate and Scheduler
@@ -68,9 +67,7 @@ def parse_args(add_pl_args=True, is_notebook=False, print_args=True):
     # ===============================================================================
     # Testing
     # ===============================================================================
-    parser.add_argument(
-        "--resume_ckpt", type=str, default=None, help="resuming checkpoint"
-    )
+    parser.add_argument("--resume_ckpt", type=str, default=None, help="resuming checkpoint")
 
     if add_pl_args:
         parser = pl.Trainer.add_argparse_args(parser)

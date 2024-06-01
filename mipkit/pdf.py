@@ -25,9 +25,7 @@ def existance_verify(pdf_path) -> bool:
     return os.path.isfile(pdf_path)
 
 
-def expand_margin(
-    path_to_load, path_to_save=None, expected_margin=100, overwrite=False
-):
+def expand_margin(path_to_load, path_to_save=None, expected_margin=100, overwrite=False):
     folder_dir = os.path.dirname(path_to_load)
     filename = os.path.basename(path_to_load)
     base_filename, ext = os.path.splitext(filename)
@@ -76,9 +74,7 @@ def expand_margin(
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter
-    )
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument(
         "-V",
         "--version",

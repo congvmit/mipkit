@@ -49,18 +49,14 @@ def combine_images(images: list, axis=1):
     """
     ndim = images[0].ndim
     shapes = np.array([mat.shape for mat in images])
-    assert np.all(
-        map(lambda e: len(e) == ndim, shapes)
-    ), "all images should be same ndim."
+    assert np.all(map(lambda e: len(e) == ndim, shapes)), "all images should be same ndim."
     if axis == 0:  # merge images vertically
         # Merge image cols
         cols = np.max(shapes[:, 1])
 
         # Expand the cols size of each image to make the cols consistent
         copy_imgs = [
-            cv2.copyMakeBorder(
-                img, 0, 0, 0, cols - img.shape[1], cv2.BORDER_CONSTANT, (0, 0, 0)
-            )
+            cv2.copyMakeBorder(img, 0, 0, 0, cols - img.shape[1], cv2.BORDER_CONSTANT, (0, 0, 0))
             for img in images
         ]
         # Merge vertically
@@ -72,9 +68,7 @@ def combine_images(images: list, axis=1):
 
         # Expand the row size of each image to make rows consistent
         copy_imgs = [
-            cv2.copyMakeBorder(
-                img, 0, rows - img.shape[0], 0, 0, cv2.BORDER_CONSTANT, (0, 0, 0)
-            )
+            cv2.copyMakeBorder(img, 0, rows - img.shape[0], 0, 0, cv2.BORDER_CONSTANT, (0, 0, 0))
             for img in images
         ]
 

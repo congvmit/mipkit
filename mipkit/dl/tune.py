@@ -116,6 +116,4 @@ def start_tuning(
 
     print("Best hyperparameters found were: ", analysis.best_config)
     analysis.results_df.to_csv(os.path.join(log_path, "results.csv"), index=False)
-    analysis.best_result_df.to_csv(
-        os.path.join(log_path, "best_results.csv"), index=False
-    )
+    analysis.best_result_df.to_csv(os.path.join(log_path, "best_results.csv"), index=False)

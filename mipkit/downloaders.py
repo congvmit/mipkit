@@ -55,9 +55,7 @@ def download_from_youtube(output_path, video_id):
     try:
         from pytube import YouTube
     except ImportError as e:
-        raise ImportError(
-            "No package `pytube`, cannot execute `download_from_youtube`."
-        )
+        raise ImportError("No package `pytube`, cannot execute `download_from_youtube`.")
     yt = (
         YouTube(f"https://youtu.be/watch?v={video_id}")
         .streams.first()

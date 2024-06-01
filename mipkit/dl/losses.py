@@ -71,12 +71,12 @@ class CCCLoss(_Loss):
             mask, dim=1, keepdim=True
         )
 
-        target_var = torch.sum(
-            mask * (target - target_mean) ** 2, dim=1, keepdim=True
-        ) / torch.sum(mask, dim=1, keepdim=True)
-        input_var = torch.sum(
-            mask * (input - input_mean) ** 2, dim=1, keepdim=True
-        ) / torch.sum(mask, dim=1, keepdim=True)
+        target_var = torch.sum(mask * (target - target_mean) ** 2, dim=1, keepdim=True) / torch.sum(
+            mask, dim=1, keepdim=True
+        )
+        input_var = torch.sum(mask * (input - input_mean) ** 2, dim=1, keepdim=True) / torch.sum(
+            mask, dim=1, keepdim=True
+        )
 
         cov = torch.sum(
             mask * (target - target_mean) * (input - input_mean), dim=1, keepdim=True
