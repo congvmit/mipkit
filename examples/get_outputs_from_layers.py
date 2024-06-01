@@ -20,9 +20,7 @@ y = model(x)
 print(y.shape)
 
 # Initialize Hooking Wrapper to get outputs from a specific layers
-hooker = mipkit.ForwardHook(
-    model, output_layers=["layer1.0.conv1", "flatten1", "flatten", "fc"]
-)
+hooker = mipkit.ForwardHook(model, output_layers=["layer1.0.conv1", "flatten1", "flatten", "fc"])
 y = hooker(x)
 print(y.shape)  # The output of model
 

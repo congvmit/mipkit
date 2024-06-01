@@ -124,14 +124,10 @@ class LightningMNISTClassifier(pl.LightningModule):
         self.mnist_train, self.mnist_val = random_split(mnist_train, [55000, 5000])
 
     def train_dataloader(self):
-        return DataLoader(
-            self.mnist_train, batch_size=int(self.batch_size), num_workers=4
-        )
+        return DataLoader(self.mnist_train, batch_size=int(self.batch_size), num_workers=4)
 
     def val_dataloader(self):
-        return DataLoader(
-            self.mnist_val, batch_size=int(self.batch_size), num_workers=4
-        )
+        return DataLoader(self.mnist_val, batch_size=int(self.batch_size), num_workers=4)
 
     def configure_optimizers(self):
         if self.opt == "adam":
@@ -150,9 +146,7 @@ def train_mnist_tune(tuning_config, data_dir=None, num_epochs=10, num_gpus=1):
     # ===============================================================================
     from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
 
-    early_stop_cb = EarlyStopping(
-        monitor="ptl/val_loss", patience=5, verbose=True, mode="min"
-    )
+    early_stop_cb = EarlyStopping(monitor="ptl/val_loss", patience=5, verbose=True, mode="min")
 
     ckpt_cb = ModelCheckpoint(
         tune.get_trial_dir() + "/checkpoints",

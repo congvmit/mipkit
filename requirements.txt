@@ -1,5 +1,16 @@
+# General
 numpy
 matplotlib
+tqdm
+pyyaml
+termcolor
+ipdb
+IPython
+pyink
+isort
+black[jupyter]
+
+
 # Image
 # opencv-python
 # torch
@@ -9,9 +20,4 @@ matplotlib
 # tensorboard
 # librosa
 # pytube
-# tqdm
-# termcolor
 # itk
-# pyyaml
-ipdb
-IPython

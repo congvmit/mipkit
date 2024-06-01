@@ -22,15 +22,23 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
-import warnings
 
-try:
+import warnings
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
     import librosa
     import numpy as np
     import pylab
     from matplotlib import cm
-except ImportError as e:
-    warnings.warn(e.msg)
+
+# try:
+#     import librosa
+#     import numpy as np
+#     import pylab
+#     from matplotlib import cm
+# except ImportError as e:
+#     warnings.warn(e.msg)
 
 
 def load_file(fp, sr=None):
@@ -71,9 +79,7 @@ def save_mfcc(mel, path_to_save):
     # Plotting the spectrogram and save as JPG without axes (just the image)
     # pylab.figure(figsize=(3, 3))
     pylab.axis("off")
-    pylab.axes(
-        [0.0, 0.0, 1.0, 1.0], frameon=False, xticks=[], yticks=[]
-    )  # Remove the white edge
+    pylab.axes([0.0, 0.0, 1.0, 1.0], frameon=False, xticks=[], yticks=[])  # Remove the white edge
     librosa.display.specshow(mel, cmap=cm.jet)
     pylab.savefig(path_to_save, bbox_inches=None, pad_inches=0)
     pylab.close()
@@ -91,9 +97,7 @@ def save_mel(mel, path_to_save):
     # Plotting the spectrogram and save as JPG without axes (just the image)
     # pylab.figure(figsize=(3, 3))
     pylab.axis("off")
-    pylab.axes(
-        [0.0, 0.0, 1.0, 1.0], frameon=False, xticks=[], yticks=[]
-    )  # Remove the white edge
+    pylab.axes([0.0, 0.0, 1.0, 1.0], frameon=False, xticks=[], yticks=[])  # Remove the white edge
     librosa.display.specshow(mel, cmap=cm.jet)
     pylab.savefig(path_to_save, bbox_inches=None, pad_inches=0)
     pylab.close()

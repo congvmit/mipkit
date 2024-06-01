@@ -22,6 +22,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
+
 import argparse
 import copy
 import json
@@ -236,9 +237,7 @@ def timeit(verbose=True):
             start_time = time.time()
             results = func(*args, **kwargs)
             if verbose:
-                print(
-                    f"The function takes {time.time() - start_time:4f} (s) to process"
-                )
+                print(f"The function takes {time.time() - start_time:4f} (s) to process")
             return results
 
         return timeit_func
@@ -254,9 +253,7 @@ def deprecated(message=""):
     def deprecated_decorator(func):
         def deprecated_func(*args, **kwargs):
             warnings.warn(
-                "This {} is deprecated and will be removed soon. {}".format(
-                    func.__name__, message
-                ),
+                "This {} is deprecated and will be removed soon. {}".format(func.__name__, message),
                 category=DeprecationWarning,
                 stacklevel=2,
             )

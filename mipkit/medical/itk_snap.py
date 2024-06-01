@@ -45,6 +45,4 @@ class ITKSnap:
         if self.show_command:
             print("Command: ", " ".join(command))
 
-        process = subprocess.run(
-            command, stdout=subprocess.PIPE, universal_newlines=True
-        )
+        process = subprocess.run(command, stdout=subprocess.PIPE, universal_newlines=True)

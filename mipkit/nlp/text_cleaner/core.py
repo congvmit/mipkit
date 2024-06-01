@@ -118,9 +118,7 @@ def to_ascii_unicode(text, lang="en", no_emoji=False):
     return text
 
 
-def normalize_whitespace(
-    text, no_line_breaks=False, strip_lines=True, keep_two_line_breaks=False
-):
+def normalize_whitespace(text, no_line_breaks=False, strip_lines=True, keep_two_line_breaks=False):
     """
     Given ``text`` str, replace one or more spacings with a single space, and one
     or more line breaks with a single newline. Also strip leading/trailing whitespace.
@@ -394,7 +392,5 @@ def clean(
     # if no_extra_spaces:
     # text = remove_extra_spaces(text)
     if normalize_whitespace:
-        text = _normalize_whitespace(
-            text, no_line_breaks, strip_lines, keep_two_line_breaks
-        )
+        text = _normalize_whitespace(text, no_line_breaks, strip_lines, keep_two_line_breaks)
     return text
