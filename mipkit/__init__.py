@@ -24,4 +24,9 @@ THE SOFTWARE.
 """
 
 from . import audio, downloaders, fmt, images, logger, mprocess, pytorch, stats, utils, video, vis
-from .debug import *
+from .debug import set_trace, Debugger, run_async_func
+
+__all__ = ['audio', 'downloaders', 'fmt', 'images', 'logger', 
+           'mprocess', 'pytorch', 'stats', 
+           'utils', 'video', 'vis', 
+           'set_trace', 'Debugger', 'run_async_func']

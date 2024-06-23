@@ -28,48 +28,53 @@ THE SOFTWARE.
 #
 # References
 # [1] https://stackoverflow.com/questions/16867347/step-by-step-debugging-with-ipython
+# [2] https://stackoverflow.com/questions/32456881/getting-values-from-functions-that-run-as-asyncio-tasks
 # ===============================================================================
 import asyncio
+import warnings
+from typing import Any, Optional
 
+__all__ = ["set_trace"]
 
 class Debugger:
-
-    def __init__(self, method="ipython"):
-        """Debugger with available methods: ipdb, pdb or ipython
-
-        Args:
-            method (str, optional): debugger method. Defaults to 'ipdb'.
-        """
-        self.tracer = self.init_tracer(method)
-
-    def init_tracer(self, method):
-        assert method in ["ipdb", "pdb", "ipython", "bpython"]
-        if method == "ipdb":
-            import ipdb
-
-            return ipdb.set_trace
-        elif method == "pdb":
-            import pdb
-
-            return pdb.set_trace
-        elif method == "ipython":
-            import IPython
-
-            return IPython.embed
-        elif method == "bpython":
-            import bpython
-
-            return bpython.embed
-
-    def set_trace(self, method=None):
+    @staticmethod
+    def set_trace(method=None):
+        tracer = None
         if method is not None:
-            self.tracer = self.init_tracer(method)
-        return self.tracer
+            assert method in ["ipdb", "pdb", "ipython", "bpython"]
+            if method == "ipdb":
+                import ipdb
 
+                tracer = ipdb.set_trace
+            elif method == "pdb":
+                import pdb
+
+                tracer = pdb.set_trace
+            elif method == "ipython":
+                import IPython
+
+                tracer = IPython.embed
+            elif method == "bpython":
+                import bpython
+
+                tracer = bpython.embed
+        return tracer
+
+    @staticmethod
+    def run_async_func(func) -> Optional[Any]: 
+        if not asyncio.get_event_loop().is_running():
+            warnings.warn("Event loop is not running.")
+            return
+        loop = asyncio.get_event_loop()
+        task = loop.create_task(func)
+        loop.run_until_complete(asyncio.wait([task]))
+        return task.result()
 
 if asyncio.get_event_loop().is_running():
     from . import nest_asyncio
 
     nest_asyncio.apply()
 
-set_trace = Debugger().set_trace()
+set_trace = Debugger.set_trace(method="ipython")
+run_async_func = Debugger.run_async_func
+
