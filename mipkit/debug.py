@@ -36,6 +36,7 @@ from typing import Any, Optional
 
 __all__ = ["set_trace"]
 
+
 class Debugger:
     @staticmethod
     def set_trace(method=None):
@@ -61,7 +62,7 @@ class Debugger:
         return tracer
 
     @staticmethod
-    def run_async_func(func) -> Optional[Any]: 
+    def run_async_func(func) -> Optional[Any]:
         if not asyncio.get_event_loop().is_running():
             warnings.warn("Event loop is not running.")
             return
@@ -70,11 +71,13 @@ class Debugger:
         loop.run_until_complete(asyncio.wait([task]))
         return task.result()
 
-if asyncio.get_event_loop().is_running():
-    from . import nest_asyncio
 
-    nest_asyncio.apply()
+try:
+    if asyncio.get_event_loop().is_running():
+        from . import nest_asyncio
 
+        nest_asyncio.apply()
+except RuntimeError:
+    pass
 set_trace = Debugger.set_trace(method="ipython")
 run_async_func = Debugger.run_async_func
-
