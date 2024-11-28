@@ -29,7 +29,7 @@ from setuptools import find_packages, setup
 
 __author__ = "Cong M. Vo"
 __author_email__ = "congvm.it@gmail.com"
-__version__ = "1.7.0"
+__version__ = "1.7.2"
 
 with open("requirements.txt") as f:
     requirements = f.read().splitlines()
